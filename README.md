@@ -1,6 +1,6 @@
-# 🔥 BugHunter PRO MAX
+# 🔥 BugHunter
 
-BugHunter PRO MAX is a **full-stack web security testing dashboard** built to simulate real-world bug bounty workflows.  
+BugHunter  is a **full-stack web security testing dashboard** built to simulate real-world bug bounty workflows.  
 It combines automated vulnerability scanning with a clean visual dashboard to help identify potential security issues efficiently.
 
 ---
