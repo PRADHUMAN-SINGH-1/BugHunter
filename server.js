@@ -6,6 +6,9 @@ const cheerio = require("cheerio");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.send("🚀 BugHunter API is running");
+});
 
 const PORT = process.env.PORT || 5001;
 
