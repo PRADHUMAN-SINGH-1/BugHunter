@@ -33,7 +33,7 @@ function App() {
         : { url };
 
     try {
-      const res = await fetch(`http://localhost:5001/${tab}`, {
+      const res = await fetch(`https://bughunter-h9tw.onrender.com/${tab}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
