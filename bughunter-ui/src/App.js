@@ -1,335 +1,57 @@
 import { useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import jsPDF from "jspdf";
-import { Cell } from "recharts";
+import { ArrowUpRight, Bot, Menu, Play, ShieldCheck, Sparkles } from "lucide-react";
+import "./App.css";
+import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
+import { ApprovalCard } from "./components/ApprovalCard";
+import { AssistantChat } from "./components/AssistantChat";
+import { ExecutiveSummary } from "./components/ExecutiveSummary";
+import { FindingCard } from "./components/FindingCard";
+import { ProgressIndicator } from "./components/ProgressIndicator";
+import { ReportPanel } from "./components/ReportPanel";
+import { ScanTimeline } from "./components/ScanTimeline";
+import { useAssistant } from "./hooks/useAssistant";
 
 function App() {
-  const [url, setUrl] = useState("");
-  const [tab, setTab] = useState("scan");
-  const [result, setResult] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const assistant = useAssistant();
+  const findings = assistant.assessment?.findings || [];
 
-  const tools = [
-    "scan",
-    "idor",
-    "params",
-    "headers",
-    "sensitive",
-    "endpoints",
-    "crawl",
-    "ratelimit",
-    "auth",
-    "sqli"
-  ];
+  return <div className="app-shell">
+    <div className="ambient ambient-one" /><div className="ambient ambient-two" />
+    <header className="topbar">
+      <a className="brand" href="#workspace" aria-label="BugHunter AI home"><span className="brand-mark"><ShieldCheck size={22} /></span><span>BugHunter <em>AI</em></span></a>
+      <div className="topbar-actions"><span className="topbar-status"><span /> Evidence-first analysis</span><button className="advanced-trigger" onClick={() => setDrawerOpen(true)}><Menu size={17} /> Advanced scanners</button></div>
+    </header>
 
-  const run = async () => {
-    if (!url) return alert("Enter URL");
+    <main id="workspace" className="workspace">
+      <section className="hero">
+        <div className="hero-copy"><p className="eyebrow hero-eyebrow"><Sparkles size={14} /> YOUR AI APPLICATION SECURITY ENGINEER</p><h1>Security clarity<br /><span>at the speed of code.</span></h1><p>Describe your goal. BugHunter AI plans authorized checks, traces deterministic evidence, and turns security signals into developer-ready action.</p><div className="hero-actions"><button className="demo-button" onClick={assistant.runDemo} disabled={assistant.isWorking}><Play size={16} fill="currentColor" /> Analyze Demo Application</button><span>Safe sample · no API key · predictable results</span></div></div>
+        <div className="hero-orbit"><div className="orbit-core"><Bot size={31} /><span>AI</span></div><i /><i /><i /></div>
+      </section>
 
-    setLoading(true);
+      <ProgressIndicator isWorking={assistant.isWorking} />
+      {assistant.error && <div className="error-banner" role="alert"><strong>Assessment paused.</strong><span>{assistant.error}</span><span>Check the target URL, authorization, or backend configuration and try again.</span></div>}
 
-    const body =
-      tab === "idor" || tab === "endpoints"
-        ? { baseUrl: url }
-        : { url };
-
-    try {
-      const res = await fetch(`https://bughunter-h9tw.onrender.com/${tab}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-
-      const data = await res.json();
-
-      if (!data) return;
-
-      if (Array.isArray(data)) {
-        setResult(data);
-      } else {
-        setResult([data]);
-      }
-    } catch (err) {
-      alert("Server error");
-    }
-
-    setLoading(false);
-  };
-
-  const color = (severity) => {
-    if (severity === "HIGH") return "#7f1d1d";
-    if (severity === "MEDIUM") return "#78350f";
-    return "#064e3b";
-  };
-
-  // 🔥 DASHBOARD STATS
-  const getStats = () => {
-    let high = 0;
-    let medium = 0;
-    let low = 0;
-
-    result.forEach((r) => {
-      if (r.severity === "HIGH") high++;
-      else if (r.severity === "MEDIUM") medium++;
-      else low++;
-    });
-
-    return {
-      total: result.length,
-      high,
-      medium,
-      low
-    };
-  };
-
-  const stats = getStats();
-
-  // 📊 CHART DATA
-  const chartData = [
-    { name: "HIGH", value: stats.high },
-    { name: "MEDIUM", value: stats.medium },
-    { name: "LOW", value: stats.low }
-  ];
-
-  // 📄 EXPORT PDF
-  const exportPDF = () => {
-    const doc = new jsPDF();
-
-    doc.setFontSize(18);
-    doc.text("BugHunter Scan Report", 20, 20);
-
-    doc.setFontSize(12);
-
-    let y = 30;
-
-    result.forEach((r) => {
-      doc.text(`Target: ${r.target}`, 20, y);
-      y += 6;
-      doc.text(`Status: ${r.status}`, 20, y);
-      y += 6;
-      doc.text(`Finding: ${r.finding}`, 20, y);
-      y += 6;
-      doc.text(`Severity: ${r.severity}`, 20, y);
-      y += 6;
-
-      if (r.payload) {
-        doc.text(`Payload: ${r.payload}`, 20, y);
-        y += 6;
-      }
-
-      y += 6;
-
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
-    });
-
-    doc.save("BugHunter_Report.pdf");
-  };
-
-  return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#020617", color: "white" }}>
-      
-      {/* SIDEBAR */}
-      <div style={{
-        width: 220,
-        background: "#020617",
-        borderRight: "1px solid #1e293b",
-        padding: 20
-      }}>
-        <h2 style={{ color: "#38bdf8" }}>BugHunter</h2>
-
-        {tools.map((t) => (
-          <div
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              padding: "10px 12px",
-              marginTop: 10,
-              borderRadius: 8,
-              cursor: "pointer",
-              background: tab === t ? "#38bdf8" : "transparent",
-              color: tab === t ? "#000" : "#94a3b8"
-            }}
-          >
-            {t.toUpperCase()}
-          </div>
-        ))}
-      </div>
-
-      {/* MAIN CONTENT */}
-      <div style={{ flex: 1, padding: 30 }}>
-        
-        {/* HEADER */}
-        <h1 style={{ color: "#38bdf8" }}>Dashboard</h1>
-
-        {/* SUMMARY CARDS */}
-        <div style={{ display: "flex", gap: 20, marginTop: 20 }}>
-          <div style={{ background: "#020617", padding: 20, borderRadius: 12, border: "1px solid #1e293b", width: 150 }}>
-            <p>Total</p>
-            <h2>{stats.total}</h2>
-          </div>
-
-          <div style={{ background: "#7f1d1d", padding: 20, borderRadius: 12, width: 150 }}>
-            <p>HIGH</p>
-            <h2>{stats.high}</h2>
-          </div>
-
-          <div style={{ background: "#78350f", padding: 20, borderRadius: 12, width: 150 }}>
-            <p>MEDIUM</p>
-            <h2>{stats.medium}</h2>
-          </div>
-
-          <div style={{ background: "#064e3b", padding: 20, borderRadius: 12, width: 150 }}>
-            <p>LOW</p>
-            <h2>{stats.low}</h2>
-          </div>
+      <section className="workspace-grid">
+        <div className="conversation-column">
+          <AssistantChat messages={assistant.messages} onSend={assistant.sendMessage} isWorking={assistant.isWorking} />
+          <ApprovalCard gate={assistant.gate} scanPlan={assistant.scanPlan} onAuthorize={assistant.confirmAuthorization} onScope={assistant.chooseScope} onApprove={assistant.approvePlan} disabled={assistant.isWorking} />
         </div>
+        <aside className="context-column">
+          <div className="context-card panel"><p className="eyebrow">HOW IT WORKS</p><div className="context-steps"><span><b>01</b> Describe your goal</span><span><b>02</b> Approve the plan</span><span><b>03</b> Review evidence</span></div><button onClick={() => setDrawerOpen(true)}>Need a focused check? <ArrowUpRight size={15} /></button></div>
+          <ScanTimeline timeline={assistant.timeline} visible={assistant.isWorking || Boolean(assistant.assessment)} />
+        </aside>
+      </section>
 
-{/* 📊 CHART */}
-<div style={{
-  marginTop: 30,
-  background: "#020617",
-  padding: 20,
-  borderRadius: 12,
-  border: "1px solid #1e293b"
-}}>
-  <h3>📊 Vulnerability Distribution</h3>
-
-  {stats.total === 0 ? (
-    <div style={{
-      height: 250,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "#94a3b8"
-    }}>
-      No scan data yet 🚫
-    </div>
-  ) : (
-    <div style={{ width: "100%", height: 300 }}>
-      <ResponsiveContainer>
-        <BarChart data={chartData}>
-          <XAxis dataKey="name" stroke="#94a3b8" />
-          <YAxis stroke="#94a3b8" />
-          <Tooltip />
-
-          <Bar dataKey="value">
-            {chartData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={
-                  entry.name === "HIGH"
-                    ? "#ef4444"
-                    : entry.name === "MEDIUM"
-                    ? "#f59e0b"
-                    : "#10b981"
-                }
-              />
-            ))}
-          </Bar>
-
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  )}
-</div>
-
-        {/* INPUT + BUTTONS */}
-        <div style={{ marginTop: 30 }}>
-          <input
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://target.com"
-            style={{
-              padding: 12,
-              width: 400,
-              borderRadius: 8,
-              border: "1px solid #1e293b",
-              background: "#020617",
-              color: "white"
-            }}
-          />
-
-          <button
-            onClick={run}
-            style={{
-              marginLeft: 10,
-              padding: "12px 20px",
-              borderRadius: 8,
-              border: "none",
-              background: "#22c55e",
-              color: "black",
-              cursor: "pointer"
-            }}
-          >
-            ▶ Run {tab.toUpperCase()}
-          </button>
-
-          <button
-            onClick={exportPDF}
-            style={{
-              marginLeft: 10,
-              padding: "12px 20px",
-              borderRadius: 8,
-              border: "none",
-              background: "#38bdf8",
-              color: "black",
-              cursor: "pointer"
-            }}
-          >
-            📄 Export PDF
-          </button>
-        </div>
-
-        {/* LOADING */}
-        {loading && <p style={{ marginTop: 20 }}>⏳ Running scan...</p>}
-
-        {/* RESULTS */}
-        <div style={{ marginTop: 30 }}>
-          {result.map((r, i) => (
-            <div
-              key={i}
-              style={{
-                background: color(r.severity),
-                padding: 20,
-                marginBottom: 15,
-                borderRadius: 12,
-                boxShadow: "0 0 15px rgba(0,0,0,0.4)"
-              }}
-            >
-              <p><b>🎯 Target:</b> {r.target}</p>
-              <p><b>📡 Status:</b> {r.status}</p>
-
-              <p>
-                <b>🧠 Finding:</b> {r.finding}
-                <span style={{
-                  marginLeft: 10,
-                  padding: "4px 8px",
-                  borderRadius: 6,
-                  background:
-                    r.severity === "HIGH"
-                      ? "#ef4444"
-                      : r.severity === "MEDIUM"
-                      ? "#f59e0b"
-                      : "#10b981",
-                  color: "black",
-                  fontSize: 12
-                }}>
-                  {r.severity}
-                </span>
-              </p>
-
-              {r.payload && <p><b>💉 Payload:</b> {r.payload}</p>}
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </div>
-  );
+      {assistant.assessment && <section className="results-workspace">
+        <ExecutiveSummary summary={assistant.assessment.executiveSummary} findings={findings} executedTools={assistant.assessment.executedTools} />
+        <div className="findings-heading"><div><p className="eyebrow">TECHNICAL FINDINGS</p><h2>Evidence, not guesses.</h2></div><span>{findings.length} finding{findings.length === 1 ? "" : "s"}</span></div>
+        <div className="findings-list">{findings.length ? findings.map((finding, index) => <FindingCard key={`${finding.title}-${index}`} finding={finding} index={index} />) : <div className="empty-findings panel"><ShieldCheck size={24} /><h3>No evidence-backed findings were returned.</h3><p>The assistant excluded any claim that was not tied to a scanner tool.</p></div>}</div>
+        <ReportPanel report={assistant.assessment.report} />
+      </section>}
+    </main>
+    <AdvancedScannerDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+  </div>;
 }
 
 export default App;

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "node --test server/scanners/scanEngine.test.js server/ai/assistantOrchestrator.test.js server/demo/demoAssessment.test.js",
+    "check": "node --check server.js && node --check server/http/safeRequest.js && node --check server/scanners/scanEngine.js && node --check server/routes/scannerRoutes.js && node --check server/routes/assistantRoutes.js && node --check server/ai/openaiClient.js && node --check server/ai/assistantOrchestrator.js && node --check server/ai/toolDefinitions.js && node --check server/ai/prompts.js && node --check server/ai/schemas.js && node --check server/demo/demoAssessment.js"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,7 @@
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "node-fetch": "^3.3.2",
+    "openai": "^6.48.0",
     "recharts": "^3.8.0"
   }
 }
