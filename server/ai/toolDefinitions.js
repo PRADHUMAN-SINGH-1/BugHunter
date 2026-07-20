@@ -19,7 +19,7 @@ const findingsParameters = {
   type: "object",
   additionalProperties: false,
   required: ["findings"],
-  properties: { findings: { type: "array", items: {} } }
+  properties: { findings: { type: "array", items: { type: "object" } } }
 };
 
 const functionTools = [
