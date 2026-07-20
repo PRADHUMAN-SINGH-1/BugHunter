@@ -15,11 +15,56 @@ const baseUrlParameters = {
   properties: { baseUrl: { type: "string", description: "Authorized base URL or object-ID URL prefix." } }
 };
 
-const findingsParameters = {
+const rawFindingSchema = {
+  type: "object",
+  additionalProperties: false,
+  required: ["finding", "severity"],
+  properties: {
+    finding: { type: "string" },
+    severity: { type: "string" }
+  }
+};
+
+const evidenceSchema = {
+  type: "object",
+  additionalProperties: false,
+  required: ["sourceTools", "summary"],
+  properties: {
+    sourceTools: { type: "array", items: { type: "string" } },
+    summary: { type: "string" }
+  }
+};
+
+const normalizedFindingSchema = {
+  type: "object",
+  additionalProperties: false,
+  required: ["title", "severity", "confidence", "category", "evidence", "impact", "remediation", "manualVerification", "owasp", "codeExample"],
+  properties: {
+    title: { type: "string" },
+    severity: { type: "string" },
+    confidence: { type: "number", minimum: 0, maximum: 1 },
+    category: { type: "string" },
+    evidence: evidenceSchema,
+    impact: { type: "string" },
+    remediation: { type: "string" },
+    manualVerification: { type: "boolean" },
+    owasp: { type: ["string", "null"] },
+    codeExample: { type: ["string", "null"] }
+  }
+};
+
+const rawFindingsParameters = {
   type: "object",
   additionalProperties: false,
   required: ["findings"],
-  properties: { findings: { type: "array", items: { type: "object" } } }
+  properties: { findings: { type: "array", items: rawFindingSchema } }
+};
+
+const normalizedFindingsParameters = {
+  type: "object",
+  additionalProperties: false,
+  required: ["findings"],
+  properties: { findings: { type: "array", items: normalizedFindingSchema } }
 };
 
 const functionTools = [
@@ -31,8 +76,8 @@ const functionTools = [
   { type: "function", name: "run_reflection_scan", description: "Run authorized reflected-input checks using controlled payloads.", strict: true, parameters: urlParameters },
   { type: "function", name: "run_sqli_scan", description: "Run authorized SQL-injection heuristics using controlled payloads.", strict: true, parameters: urlParameters },
   { type: "function", name: "run_idor_scan", description: "Run authorized sequential object-ID checks against a supplied URL prefix.", strict: true, parameters: baseUrlParameters },
-  { type: "function", name: "normalize_findings", description: "Normalize raw scanner output into BugHunter finding records.", strict: true, parameters: findingsParameters },
-  { type: "function", name: "generate_security_report", description: "Generate a Markdown report from normalized findings only.", strict: true, parameters: findingsParameters }
+  { type: "function", name: "normalize_findings", description: "Normalize raw scanner output into BugHunter finding records.", strict: true, parameters: rawFindingsParameters },
+  { type: "function", name: "generate_security_report", description: "Generate a Markdown report from normalized findings only.", strict: true, parameters: normalizedFindingsParameters }
 ];
 
 const toolNameToScanner = {

@@ -2,6 +2,28 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { createScanPlan, handleAssistantMessage, keepEvidenceBackedFindings, runToolLoop } = require("./assistantOrchestrator");
 const { functionTools, normalizeFindings, reportMarkdown } = require("./toolDefinitions");
+const { finalAssessmentSchema } = require("./schemas");
+
+function assertOpenAISchema(schema, path = "schema") {
+  assert.ok(schema && typeof schema === "object", `${path} must be an object`);
+  const types = Array.isArray(schema.type) ? schema.type : [schema.type];
+  assert.ok(types.length > 0 && types.every((type) => ["string", "number", "integer", "boolean", "object", "array", "null"].includes(type)), `${path} has an invalid type`);
+
+  if (types.includes("object")) {
+    assert.equal(schema.additionalProperties, false, `${path} objects must set additionalProperties=false`);
+    assert.ok(Array.isArray(schema.required), `${path} objects must define required`);
+    const propertyNames = Object.keys(schema.properties || {});
+    assert.deepEqual([...schema.required].sort(), [...propertyNames].sort(), `${path} required must match properties`);
+    propertyNames.forEach((name) => assertOpenAISchema(schema.properties[name], `${path}.properties.${name}`));
+  }
+
+  if (types.includes("array")) {
+    assert.ok(schema.items && typeof schema.items === "object", `${path} arrays must define items`);
+    assertOpenAISchema(schema.items, `${path}.items`);
+  }
+
+  if (schema.anyOf) schema.anyOf.forEach((variant, index) => assertOpenAISchema(variant, `${path}.anyOf[${index}]`));
+}
 
 test("assistant requests a target before it can plan a scan", async () => {
   const result = await handleAssistantMessage({ message: "Analyze my staging application" });
@@ -52,12 +74,14 @@ test("assessment gate removes findings without executed evidence", () => {
   assert.equal(findings[0].evidence.sourceTools[0], "run_header_scan");
 });
 
-test("all model tools use strict schemas", () => {
+test("all model tools and structured outputs use OpenAI-compatible strict schemas", () => {
   assert.ok(functionTools.length >= 10);
   functionTools.forEach((tool) => {
     assert.equal(tool.strict, true);
     assert.equal(tool.parameters.additionalProperties, false);
+    assertOpenAISchema(tool.parameters, `tool:${tool.name}`);
   });
+  assertOpenAISchema(finalAssessmentSchema, "finalAssessmentSchema");
 });
 
 test("normalizer and report builder retain a structured evidence trail", () => {
