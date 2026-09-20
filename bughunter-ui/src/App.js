@@ -333,8 +333,6 @@ function App() {
               <span>{assistant.error}</span>
             </div>
           )}
-
-          <ProgressIndicator isWorking={assistant.isWorking} />
         </main>
       </div>
     </div>
