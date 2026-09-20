@@ -130,14 +130,7 @@ async function runToolLoop({ message, plan, client: suppliedClient }) {
   const client = suppliedClient || (process.env.OPENAI_API_KEY ? getOpenAIClient() : null);
 
   if (!client) {
-    if (!hasFallbackKey()) {
-      throw new Error("Configure an AI provider key on the server before starting an approved assessment.");
-    }
-    try {
-      return await runGeminiFallback({ message, plan });
-    } catch (_fallbackProviderError) {
-      throw new Error("The AI service is temporarily unavailable. Check the configured fallback AI key and try again.");
-    }
+    return runGeminiFallback({ message, plan });
   }
 
   try {
@@ -189,14 +182,8 @@ async function runToolLoop({ message, plan, client: suppliedClient }) {
 
     throw new Error("The assistant exceeded the maximum tool-call rounds.");
   } catch (_primaryProviderError) {
-    if (!suppliedClient && hasFallbackKey()) {
-      try {
-        return await runGeminiFallback({ message, plan });
-      } catch (_fallbackProviderError) {
-        throw new Error("The AI service is temporarily unavailable. Check the configured fallback AI key and try again.");
-      }
-    }
-    throw new Error("The AI service is temporarily unavailable. Configure a server-side fallback AI key and try again.");
+    if (!suppliedClient) return runGeminiFallback({ message, plan });
+    throw new Error("The AI service is temporarily unavailable. Try again.");
   }
 }
 
