@@ -2,7 +2,7 @@ const { getOpenAIClient, getModel } = require("./openaiClient");
 const { generateFallbackText, hasFallbackKey } = require("./fallbackClient");
 const { SECURITY_ASSISTANT_PROMPT } = require("./prompts");
 const { finalAssessmentSchema } = require("./schemas");
-const { functionTools, executeTool, reportMarkdown } = require("./toolDefinitions");
+const { functionTools, executeTool, normalizeFindings, reportMarkdown } = require("./toolDefinitions");
 const { validateTarget } = require("../http/safeRequest");
 
 const passiveTools = ["validate_target", "run_header_scan", "run_endpoint_discovery", "run_crawl", "run_sensitive_scan", "normalize_findings", "generate_security_report"];
@@ -84,25 +84,7 @@ async function runGeminiFallback({ message, plan }) {
     if (!entry.tool.startsWith("run_")) continue;
     const values = Array.isArray(entry.result) ? entry.result : [entry.result];
     for (const value of values) {
-      const metadata = {
-        category: entry.tool.replace(/^run_/, ""),
-        owasp: null,
-        impact: "This scanner observation requires developer review.",
-        remediation: "Review the evidence and verify the behavior manually.",
-        codeExample: null
-      };
-      normalizedFindings.push({
-        title: value?.finding || "Security observation",
-        severity: String(value?.severity || "LOW").toLowerCase(),
-        confidence: /strong|error detected|no access control/i.test(value?.finding || "") ? 0.82 : /possible|differs|anomaly|interesting/i.test(value?.finding || "") ? 0.58 : 0.35,
-        category: metadata.category,
-        evidence: { sourceTools: [entry.tool], summary: value?.finding || "Scanner returned an observation." },
-        impact: metadata.impact,
-        remediation: metadata.remediation,
-        manualVerification: true,
-        owasp: metadata.owasp,
-        codeExample: metadata.codeExample
-      });
+      normalizedFindings.push(...normalizeFindings(value, entry.tool));
     }
   }
 
