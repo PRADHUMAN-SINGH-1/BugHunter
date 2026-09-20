@@ -2199,3 +2199,439 @@
     display: none;
   }
 }
+
+/* Approval gate redesign: same visual language as the approved dashboard. */
+.reference-approval {
+  margin-top: 10px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 15px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(31, 37, 51, .035);
+}
+
+.reference-approval-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.authorization-icon {
+  color: #8f5d00;
+  background: #fff1c9;
+  border: 1px solid #f1d995;
+}
+
+.mode-icon {
+  color: #5d4bd0;
+  background: var(--violet-soft);
+  border: 1px solid #d9d1ff;
+}
+
+.plan-icon {
+  color: #237d59;
+  background: var(--mint-soft);
+  border: 1px solid #caebdb;
+}
+
+.reference-approval-body {
+  min-width: 0;
+}
+
+.reference-approval-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.reference-approval-kicker span {
+  color: var(--violet-dark);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 1px;
+}
+
+.reference-approval-kicker strong {
+  color: #8a94a6;
+  font-size: 8px;
+  letter-spacing: .7px;
+  white-space: nowrap;
+}
+
+.reference-approval-body h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 19px !important;
+  line-height: 1.25;
+  letter-spacing: -.35px;
+}
+
+.reference-approval-body > p {
+  max-width: 760px;
+  margin: 8px 0 14px !important;
+  color: var(--ink-2) !important;
+  font-size: 11px !important;
+  line-height: 1.6 !important;
+}
+
+.reference-approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reference-primary-button {
+  min-height: 37px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--ink);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.reference-primary-button:hover {
+  background: #252e49;
+}
+
+.reference-primary-button:disabled {
+  cursor: wait;
+  opacity: .5;
+}
+
+.reference-approval-note {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: #778297;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.reference-approval-note svg {
+  flex: 0 0 auto;
+  color: var(--mint);
+}
+
+.reference-scope-options {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.reference-scope-option {
+  min-height: 92px;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #dedee3;
+  border-radius: 8px;
+  background: #fbfbfc;
+  color: var(--ink);
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.reference-scope-option:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: #c7bef5;
+  background: #f8f6ff;
+}
+
+.reference-scope-option.selected {
+  border-color: #bfb4f3;
+  background: #f4f1ff;
+  box-shadow: inset 3px 0 var(--violet);
+}
+
+.reference-scope-option:disabled {
+  cursor: wait;
+  opacity: .55;
+}
+
+.scope-option-title {
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.scope-option-copy {
+  color: #78839a;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.reference-plan-card .scan-plan-card {
+  margin-top: 12px;
+  border-color: #e1e0f0;
+  background: #faf9ff;
+}
+
+.reference-plan-card .scan-plan-top h3 {
+  color: var(--ink);
+  font-size: 10px;
+}
+
+.reference-plan-card .plan-checks div {
+  color: #44516a;
+  font-size: 9px;
+}
+
+.reference-plan-card .plan-checks small {
+  color: #7d8799;
+  font-size: 7px;
+}
+
+.reference-plan-card .non-destructive {
+  color: #768196;
+  font-size: 8px;
+  border-top-color: #e6e4ef;
+}
+
+.reference-app .assistant-panel,
+.reference-app .assistant-tab,
+.reference-app .assistant-clear,
+.reference-app .message p,
+.reference-app .chat-input textarea,
+.reference-app .reference-card-head,
+.reference-app .reference-step strong,
+.reference-app .tool-status strong,
+.reference-app .findings-table td,
+.reference-app .findings-table th,
+.reference-app .reference-section-title strong,
+.reference-app .reference-engine-head,
+.reference-app .reference-engine-grid b,
+.reference-app .reference-logo strong,
+.reference-app .reference-user strong {
+  font-size: 100%;
+}
+
+.reference-app .assistant-tab {
+  font-size: 10px;
+}
+
+.reference-app .assistant-clear {
+  font-size: 9px;
+}
+
+.reference-app .message p {
+  font-size: 11px;
+}
+
+.reference-app .chat-input textarea {
+  font-size: 11px;
+}
+
+.reference-app .reference-nav-item {
+  font-size: 12px;
+}
+
+.reference-app .reference-logo strong {
+  font-size: 15px;
+}
+
+.reference-app .reference-logo small {
+  font-size: 8px;
+}
+
+.reference-app .reference-user strong {
+  font-size: 10px;
+}
+
+.reference-app .reference-user small {
+  font-size: 8px;
+}
+
+.reference-app .reference-card-head {
+  font-size: 10px;
+}
+
+.reference-app .reference-card-head small {
+  font-size: 8px;
+}
+
+.reference-app .reference-step strong {
+  font-size: 10px;
+}
+
+.reference-app .reference-step small {
+  font-size: 8px;
+}
+
+.reference-app .tool-status strong {
+  font-size: 9px;
+}
+
+.reference-app .tool-status small {
+  font-size: 8px;
+}
+
+.reference-app .reference-section-title strong {
+  font-size: 12px;
+}
+
+.reference-app .reference-section-title small {
+  font-size: 8px;
+}
+
+.reference-app .finding-search input {
+  font-size: 9px;
+}
+
+.reference-app .findings-table td {
+  font-size: 9px;
+}
+
+.reference-app .findings-table td strong {
+  font-size: 9px;
+}
+
+.reference-app .findings-table th {
+  font-size: 8px;
+}
+
+.reference-app .reference-engine-head {
+  font-size: 10px;
+}
+
+.reference-app .reference-engine-grid small {
+  font-size: 8px;
+}
+
+.reference-app .reference-engine-grid b {
+  font-size: 9px;
+}
+
+.reference-app .scanner-field input,
+.reference-app .scanner-field select {
+  font-size: 10px;
+}
+
+.reference-app .scanner-module-strip button {
+  font-size: 8px;
+}
+
+.reference-app .theme-control {
+  font-size: 8px;
+}
+
+/* Dark mode: explicit theme inversion for the approval surfaces. */
+.editorial-app.theme-dark .reference-approval {
+  background: #151922;
+  border-color: var(--line);
+  box-shadow: 0 9px 26px rgba(0,0,0,.14);
+}
+
+.editorial-app.theme-dark .reference-approval-body h2,
+.editorial-app.theme-dark .scope-option-title,
+.editorial-app.theme-dark .reference-plan-card .scan-plan-top h3 {
+  color: var(--ink);
+}
+
+.editorial-app.theme-dark .reference-approval-body > p {
+  color: #9ea8ba !important;
+}
+
+.editorial-app.theme-dark .reference-approval-kicker span {
+  color: var(--violet-2);
+}
+
+.editorial-app.theme-dark .reference-approval-kicker strong,
+.editorial-app.theme-dark .reference-approval-note,
+.editorial-app.theme-dark .scope-option-copy,
+.editorial-app.theme-dark .reference-plan-card .plan-checks small,
+.editorial-app.theme-dark .reference-plan-card .non-destructive {
+  color: #8f99ab;
+}
+
+.editorial-app.theme-dark .authorization-icon {
+  color: #f0c45f;
+  background: #3a301b;
+  border-color: #62532d;
+}
+
+.editorial-app.theme-dark .mode-icon {
+  color: #b8adff;
+  background: #2b254a;
+  border-color: #4e4680;
+}
+
+.editorial-app.theme-dark .plan-icon {
+  color: #71d2aa;
+  background: #183126;
+  border-color: #315641;
+}
+
+.editorial-app.theme-dark .reference-primary-button {
+  background: #f0eff8;
+  color: #171a25;
+}
+
+.editorial-app.theme-dark .reference-primary-button:hover {
+  background: #fff;
+}
+
+.editorial-app.theme-dark .reference-scope-option {
+  background: #11151d;
+  border-color: #343946;
+}
+
+.editorial-app.theme-dark .reference-scope-option.selected {
+  background: #24203e;
+  border-color: #554b91;
+  box-shadow: inset 3px 0 #8b79ff;
+}
+
+.editorial-app.theme-dark .reference-scope-option:hover:not(:disabled) {
+  background: #1c202b;
+  border-color: #5b5193;
+}
+
+.editorial-app.theme-dark .reference-plan-card .scan-plan-card {
+  background: #11151d;
+  border-color: #343946;
+}
+
+.editorial-app.theme-dark .reference-plan-card .plan-checks div {
+  color: #c6cedc;
+}
+
+@media (max-width: 680px) {
+  .reference-approval {
+    grid-template-columns: 1fr;
+    gap: 11px;
+    padding: 15px;
+  }
+
+  .reference-approval-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .reference-approval-kicker {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .reference-scope-options {
+    grid-template-columns: 1fr;
+  }
+}
