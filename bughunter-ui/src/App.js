@@ -6,7 +6,6 @@ import {
   FileText,
   Filter,
   Globe2,
-  Linkedin,
   LayoutDashboard,
   LockKeyhole,
   Moon,
@@ -171,7 +170,7 @@ function App() {
         >
           <span>PS</span>
           <div><strong>Pradhuman Singh</strong><small>Full Stack Developer</small></div>
-          <Linkedin size={15} aria-hidden="true" />
+          <span className="linkedin-mark" aria-hidden="true">in</span>
         </a>
       </aside>
 
