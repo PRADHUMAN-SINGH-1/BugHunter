@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test server/scanners/scanEngine.test.js server/ai/assistantOrchestrator.test.js server/demo/demoAssessment.test.js",
-    "check": "node --check server.js && node --check server/http/safeRequest.js && node --check server/scanners/scanEngine.js && node --check server/routes/scannerRoutes.js && node --check server/routes/assistantRoutes.js && node --check server/ai/openaiClient.js && node --check server/ai/assistantOrchestrator.js && node --check server/ai/toolDefinitions.js && node --check server/ai/prompts.js && node --check server/ai/schemas.js && node --check server/demo/demoAssessment.js"
+    "check": "node --check server.js && node --check server/http/safeRequest.js && node --check server/scanners/scanEngine.js && node --check server/routes/scannerRoutes.js && node --check server/routes/assistantRoutes.js && node --check server/ai/openaiClient.js && node --check server/ai/geminiClient.js && node --check server/ai/assistantOrchestrator.js && node --check server/ai/toolDefinitions.js && node --check server/ai/prompts.js && node --check server/ai/schemas.js && node --check server/demo/demoAssessment.js"
   },
   "keywords": [],
   "author": "",
