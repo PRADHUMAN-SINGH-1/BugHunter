@@ -1,5 +1,5 @@
 const { getOpenAIClient, getModel } = require("./openaiClient");
-const { generateGeminiText, hasGeminiKey } = require("./geminiClient");
+const { generateFallbackText, hasFallbackKey } = require("./fallbackClient");
 const { SECURITY_ASSISTANT_PROMPT } = require("./prompts");
 const { finalAssessmentSchema } = require("./schemas");
 const { functionTools, executeTool, reportMarkdown } = require("./toolDefinitions");
@@ -110,7 +110,7 @@ async function runGeminiFallback({ message, plan }) {
     ? `The approved assessment completed with ${normalizedFindings.length} evidence-backed observation(s). Review heuristic results manually before remediation.`
     : "The approved assessment completed without evidence-backed findings.";
 
-  if (hasGeminiKey()) {
+  if (hasFallbackKey()) {
     try {
       const compactFindings = normalizedFindings.slice(0, 40).map((finding) => ({
         title: finding.title,
@@ -119,7 +119,7 @@ async function runGeminiFallback({ message, plan }) {
         evidence: finding.evidence.summary
       }));
 
-      const result = await generateGeminiText([
+      const result = await generateFallbackText([
         "You are BugHunter's security-report summarizer.",
         "Do not invent vulnerabilities or modify the supplied findings.",
         "Return JSON with exactly one property: executiveSummary.",
@@ -148,7 +148,7 @@ async function runToolLoop({ message, plan, client: suppliedClient }) {
   const client = suppliedClient || (process.env.OPENAI_API_KEY ? getOpenAIClient() : null);
 
   if (!client) {
-    if (!hasGeminiKey()) {
+    if (!hasFallbackKey()) {
       throw new Error("Configure an AI provider key on the server before starting an approved assessment.");
     }
     return runGeminiFallback({ message, plan });
@@ -203,7 +203,7 @@ async function runToolLoop({ message, plan, client: suppliedClient }) {
 
     throw new Error("The assistant exceeded the maximum tool-call rounds.");
   } catch (openaiError) {
-    if (!suppliedClient && hasGeminiKey()) return runGeminiFallback({ message, plan });
+    if (!suppliedClient && hasFallbackKey()) return runGeminiFallback({ message, plan });
     throw openaiError;
   }
 }
