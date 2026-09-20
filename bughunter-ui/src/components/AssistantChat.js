@@ -6,7 +6,7 @@ export function AssistantChat({ messages, onSend, isWorking, onClear }) {
     <div className="assistant-header">
       <div className="assistant-tabs">
         <button type="button" className="assistant-tab active"><ShieldCheck size={14} /> AI Security Assistant</button>
-        <button type="button" className="assistant-tab"><Bot size={14} /> Assessment Console</button>
+        <button type="button" className="assistant-tab" onClick={() => document.querySelector(".tool-reference")?.scrollIntoView({ behavior: "smooth", block: "center" })}><Bot size={14} /> Assessment Console</button>
       </div>
       <div className="assistant-header-right">
         <span className={`live-pill ${isWorking ? "working" : ""}`}><span /> {isWorking ? "Analyzing" : "Ready"}</span>
