@@ -1,4 +1,4 @@
-import { Play, ShieldCheck, Sparkles } from "lucide-react";
+import { Activity, CheckCircle2, Play, ShieldCheck, Sparkles } from "lucide-react";
 import "./App.css";
 import "./SecurityConsole.css";
 import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
@@ -14,59 +14,76 @@ import { useAssistant } from "./hooks/useAssistant";
 function App() {
   const assistant = useAssistant();
   const findings = assistant.assessment?.findings || [];
+  const highRiskCount = findings.filter((finding) => ["high", "critical"].includes(String(finding.severity).toLowerCase())).length;
 
   return (
     <div className="app-shell security-console">
-      <header className="topbar">
-        <a className="brand" href="#workspace" aria-label="BugHunter AI home">
-          <span className="brand-mark"><ShieldCheck size={20} /></span>
-          <span>BugHunter <em>AI</em></span>
+      <header className="security-header">
+        <a className="security-brand" href="#workspace" aria-label="BugHunter AI home">
+          <span className="security-mark"><ShieldCheck size={18} /></span>
+          <span>
+            <b>BUGHUNTER <em>AI</em></b>
+            <small>APPLICATION SECURITY</small>
+          </span>
         </a>
-        <div className="topbar-actions">
-          <span className="topbar-status"><span /> SYSTEM READY</span>
-          <span className="topbar-divider" />
-          <span className="topbar-mode">EVIDENCE-FIRST SECURITY</span>
+
+        <div className="header-status">
+          <span className="header-live"><i /> SYSTEM READY</span>
+          <span className="header-divider" />
+          <span className="header-caption">EVIDENCE-FIRST ENGINE</span>
         </div>
       </header>
 
-      <main id="workspace" className="workspace security-workspace">
-        <section className="hero security-hero">
-          <div className="hero-copy">
-            <p className="eyebrow hero-eyebrow"><Sparkles size={13} /> APPLICATION SECURITY WORKSPACE</p>
-            <h1>Test it. <span>Prove it.</span></h1>
-            <p>Describe an authorized target and BugHunter will build a scan plan, collect deterministic evidence, and turn the results into developer-ready findings.</p>
-            <div className="hero-actions">
-              <button className="demo-button" onClick={assistant.runDemo} disabled={assistant.isWorking}>
-                <Play size={15} fill="currentColor" /> {assistant.isWorking ? "Running demo…" : "Run safe demo"}
-              </button>
-              <span>Fixture-backed · no target traffic</span>
-            </div>
+      <main id="workspace" className="security-page">
+        <section className="assessment-head">
+          <div>
+            <div className="section-kicker"><Sparkles size={12} /> ASSESSMENT WORKSPACE</div>
+            <h1>Security assessment</h1>
+            <p>Define an authorized target, approve the checks, and review only evidence produced by the scanners.</p>
           </div>
 
-          <div className="security-readout">
-            <div className="readout-title"><span>ASSESSMENT ENGINE</span><b><i /> ONLINE</b></div>
-            <div className="readout-main">EVIDENCE-FIRST</div>
-            <div className="readout-grid">
-              <div><span>Authorization</span><strong>ENFORCED</strong></div>
-              <div><span>Findings</span><strong>TOOL-BACKED</strong></div>
-              <div><span>Network</span><strong>CONTROLLED</strong></div>
+          <div className="assessment-state">
+            <div className="state-top">
+              <span>ENGINE STATUS</span>
+              <strong><i /> ONLINE</strong>
             </div>
+            <div className="state-row"><span>Authorization</span><b>REQUIRED</b></div>
+            <div className="state-row"><span>Network posture</span><b>CONTROLLED</b></div>
+            <div className="state-row"><span>AI role</span><b>INTERPRETATION</b></div>
           </div>
         </section>
 
+        <section className="metric-strip">
+          <article><span>MODE</span><strong>GUIDED ASSESSMENT</strong><small>Plan before scan</small></article>
+          <article><span>EVIDENCE</span><strong>DETERMINISTIC</strong><small>Scanner-backed</small></article>
+          <article><span>FINDINGS</span><strong>{findings.length}</strong><small>{highRiskCount} high/critical</small></article>
+          <article><span>SCOPE</span><strong>NON-DESTRUCTIVE</strong><small>Active checks need approval</small></article>
+        </section>
+
         <ProgressIndicator isWorking={assistant.isWorking} />
+
         {assistant.error && (
-          <div className="error-banner" role="alert">
+          <div className="error-banner security-error" role="alert">
             <strong>Assessment paused.</strong>
             <span>{assistant.error}</span>
-            <span>Check the target URL, authorization, or backend configuration and try again.</span>
+            <span>Configure the active AI provider or verify the target and authorization.</span>
           </div>
         )}
 
-        <section className="workspace-grid security-grid">
-          <div className="conversation-column">
-            <div className="section-label"><span>01</span> SECURITY CONVERSATION <em>LIVE</em></div>
-            <AssistantChat messages={assistant.messages} onSend={assistant.sendMessage} isWorking={assistant.isWorking} />
+        <section className="primary-workspace">
+          <div className="primary-column">
+            <div className="section-label">
+              <span>01</span>
+              SECURITY CONVERSATION
+              <em>{assistant.isWorking ? "RUNNING" : "READY"}</em>
+            </div>
+
+            <AssistantChat
+              messages={assistant.messages}
+              onSend={assistant.sendMessage}
+              isWorking={assistant.isWorking}
+            />
+
             <ApprovalCard
               gate={assistant.gate}
               scanPlan={assistant.scanPlan}
@@ -77,45 +94,75 @@ function App() {
             />
           </div>
 
-          <aside className="context-column">
-            <div className="context-card panel security-panel">
-              <p className="eyebrow">ASSESSMENT WORKFLOW</p>
-              <div className="context-steps">
-                <span><b>01</b><strong>Describe</strong><small>Define the security goal.</small></span>
-                <span><b>02</b><strong>Authorize</strong><small>Confirm scope and permissions.</small></span>
-                <span><b>03</b><strong>Collect</strong><small>Execute approved evidence collectors.</small></span>
-                <span><b>04</b><strong>Review</strong><small>Inspect evidence and remediation.</small></span>
+          <aside className="side-rail">
+            <section className="rail-panel workflow-panel">
+              <div className="rail-title">
+                <span>ASSESSMENT FLOW</span>
+                <span className="rail-status">LIVE</span>
               </div>
-            </div>
-            <ScanTimeline timeline={assistant.timeline} visible={assistant.isWorking || Boolean(assistant.assessment)} />
+              <div className="workflow-steps">
+                <div className="workflow-step active"><b>01</b><span><strong>Describe</strong><small>Target + security goal</small></span></div>
+                <div className="workflow-step"><b>02</b><span><strong>Authorize</strong><small>Ownership + scope</small></span></div>
+                <div className="workflow-step"><b>03</b><span><strong>Approve</strong><small>Exact scanner plan</small></span></div>
+                <div className="workflow-step"><b>04</b><span><strong>Review</strong><small>Evidence + remediation</small></span></div>
+              </div>
+            </section>
+
+            <ScanTimeline
+              timeline={assistant.timeline}
+              visible={assistant.isWorking || Boolean(assistant.assessment)}
+            />
+
+            <section className="rail-panel trust-panel">
+              <div className="rail-title"><span>TRUST BOUNDARY</span></div>
+              <div className="trust-line"><CheckCircle2 size={14} /><span>Findings require executed scanner evidence.</span></div>
+              <div className="trust-line"><CheckCircle2 size={14} /><span>Active testing is explicitly gated.</span></div>
+              <div className="trust-line"><CheckCircle2 size={14} /><span>Reports are generated from observed results.</span></div>
+            </section>
           </aside>
         </section>
 
         {assistant.assessment && (
           <section className="results-workspace security-results">
-            <div className="results-header">
+            <div className="results-heading">
               <div>
-                <p className="eyebrow">ASSESSMENT OUTPUT</p>
+                <div className="section-kicker">02 · ASSESSMENT OUTPUT</div>
                 <h2>Evidence-backed results</h2>
               </div>
-              <span>{findings.length} finding{findings.length === 1 ? "" : "s"}</span>
+              <div className="results-meta">
+                <span>{findings.length} findings</span>
+                <span>{assistant.assessment.executedTools?.length || 0} tools executed</span>
+              </div>
             </div>
+
             <ExecutiveSummary
               summary={assistant.assessment.executiveSummary}
               findings={findings}
               executedTools={assistant.assessment.executedTools}
             />
-            <div className="findings-heading">
-              <div><p className="eyebrow">TECHNICAL FINDINGS</p><h2>Verified security signals</h2></div>
-              <span>{findings.length}</span>
+
+            <div className="finding-section-head">
+              <div>
+                <span>TECHNICAL FINDINGS</span>
+                <h3>Verified security signals</h3>
+              </div>
+              <small>All observations retain their scanner evidence.</small>
             </div>
+
             <div className="findings-list">
               {findings.length
                 ? findings.map((finding, index) => (
                     <FindingCard key={finding.title + index} finding={finding} index={index} />
                   ))
-                : <div className="empty-findings panel"><ShieldCheck size={22} /><h3>No evidence-backed findings were returned.</h3><p>The assistant excluded any claim that was not tied to a scanner tool.</p></div>}
+                : (
+                    <div className="empty-findings panel">
+                      <ShieldCheck size={21} />
+                      <h3>No evidence-backed findings were returned.</h3>
+                      <p>The assessment completed without a scanner-supported finding.</p>
+                    </div>
+                  )}
             </div>
+
             <ReportPanel report={assistant.assessment.report} />
           </section>
         )}
