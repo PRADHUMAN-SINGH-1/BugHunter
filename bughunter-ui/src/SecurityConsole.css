@@ -2839,3 +2839,61 @@ html.bughunter-dark .reference-logo small {
     font-size: 13px !important;
   }
 }
+
+/* Final spacing / legibility correction */
+.reference-hero {
+  min-height: 150px;
+  padding-bottom: 10px;
+}
+.reference-hero-copy p {
+  font-size: 14px !important;
+  color: #32415f !important;
+}
+.reference-main-grid {
+  margin-top: 6px;
+}
+.reference-assistant-card {
+  min-height: 0;
+}
+.reference-app .message p {
+  color: #2d3a54;
+  opacity: 1;
+  font-weight: 500;
+}
+.reference-app .reference-card-head,
+.reference-app .reference-step strong,
+.reference-app .tool-status strong,
+.reference-app .reference-section-title strong,
+.reference-app .reference-engine-head,
+.reference-app .reference-engine-grid b,
+.reference-app .reference-nav-item {
+  opacity: 1;
+  font-weight: 700;
+}
+.reference-app .reference-step small,
+.reference-app .tool-status small,
+.reference-app .reference-card-head small,
+.reference-app .reference-section-title small {
+  color: #68748b;
+  opacity: 1;
+}
+.reference-app.theme-dark .reference-hero-copy p {
+  color: #c0c9d8 !important;
+}
+.reference-app.theme-dark .reference-nav-item,
+.reference-app.theme-dark .reference-card-head,
+.reference-app.theme-dark .reference-step strong,
+.reference-app.theme-dark .tool-status strong,
+.reference-app.theme-dark .reference-section-title strong,
+.reference-app.theme-dark .reference-engine-head,
+.reference-app.theme-dark .reference-engine-grid b,
+.reference-app.theme-dark .message p {
+  color: #eef2f8;
+  opacity: 1;
+}
+.reference-app.theme-dark .reference-step small,
+.reference-app.theme-dark .tool-status small,
+.reference-app.theme-dark .reference-card-head small,
+.reference-app.theme-dark .reference-section-title small {
+  color: #aab4c5;
+}
