@@ -1,6 +1,6 @@
 import {
   Activity,
-  BarChart3,
+  ArrowRight,
   CheckCircle2,
   ChevronDown,
   Download,
