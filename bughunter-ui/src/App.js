@@ -19,7 +19,7 @@ import {
   Target,
   Wrench
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import "./SecurityConsole.css";
 import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
@@ -83,6 +83,13 @@ function App() {
       return next;
     });
   };
+  useEffect(() => {
+    try {
+      document.documentElement.dataset.bughunterTheme = darkMode ? "dark" : "light";
+      document.documentElement.classList.toggle("bughunter-dark", darkMode);
+    } catch (_error) {}
+  }, [darkMode]);
+
   const findings = useMemo(() => assistant.assessment?.findings || EMPTY_FINDINGS, [assistant.assessment]);
   const executedTools = assistant.assessment?.executedTools || [];
   const workflowStep = getWorkflowStep(assistant);
