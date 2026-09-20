@@ -137,7 +137,15 @@ function App() {
               <span>Enter an authorized target in the assistant below</span>
               <b>HTTP(S) only</b>
             </div>
-            <button className="start-assessment-button" onClick={() => document.querySelector(".chat-input textarea")?.focus()}>
+            <button
+              type="button"
+              className="start-assessment-button"
+              onClick={() => {
+                const input = document.querySelector(".assistant-column .chat-input textarea");
+                input?.scrollIntoView({ behavior: "smooth", block: "center" });
+                input?.focus();
+              }}
+            >
               Start with assistant <ArrowRight size={14} />
             </button>
           </section>
