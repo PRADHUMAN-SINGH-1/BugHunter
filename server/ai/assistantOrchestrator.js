@@ -1,4 +1,5 @@
 const { getOpenAIClient, getModel } = require("./openaiClient");
+const { generateGeminiText, hasGeminiKey } = require("./geminiClient");
 const { SECURITY_ASSISTANT_PROMPT } = require("./prompts");
 const { finalAssessmentSchema } = require("./schemas");
 const { functionTools, executeTool, reportMarkdown } = require("./toolDefinitions");
@@ -62,55 +63,149 @@ function keepEvidenceBackedFindings(assessment, executedToolNames) {
   });
 }
 
-async function runToolLoop({ message, plan, client: suppliedClient }) {
-  const client = suppliedClient || getOpenAIClient();
-  const allowedTools = plan.toolNames;
-  const tools = functionTools.filter((tool) => allowedTools.includes(tool.name));
-  const toolResults = [];
-  let response = await client.responses.create({
-    model: getModel(),
-    instructions: SECURITY_ASSISTANT_PROMPT,
-    input: `User request: ${message}\nAuthorized target: ${plan.targetUrl}\nApproved plan: ${JSON.stringify(plan.checks)}\nUse tools to collect evidence before producing findings.`,
-    tools,
-    tool_choice: "auto",
-    parallel_tool_calls: false,
-    text: { format: { type: "json_schema", name: "bughunter_security_assessment", strict: true, schema: finalAssessmentSchema } }
-  });
+async function runGeminiFallback({ message, plan }) {
+  const rawResults = [];
+  const approvedScannerTools = plan.checks.map((check) => check.tool);
 
-  for (let round = 0; round < 12; round += 1) {
-    const calls = (response.output || []).filter((item) => item.type === "function_call");
-    if (!calls.length) {
-      const assessment = parseAssessment(response);
-      const executedToolNames = toolResults.map((result) => result.name);
-      const findings = keepEvidenceBackedFindings(assessment, executedToolNames);
-      return {
-        executiveSummary: assessment.executiveSummary,
-        findings,
-        report: { markdown: reportMarkdown(findings) },
-        toolResults
+  const validation = await executeTool("validate_target", { url: plan.targetUrl }, plan.toolNames);
+  rawResults.push({ tool: "validate_target", result: validation });
+
+  for (const toolName of approvedScannerTools) {
+    const args = toolName === "run_endpoint_discovery" || toolName === "run_idor_scan"
+      ? { baseUrl: plan.targetUrl }
+      : { url: plan.targetUrl };
+
+    const result = await executeTool(toolName, args, plan.toolNames);
+    rawResults.push({ tool: toolName, result });
+  }
+
+  const normalizedFindings = [];
+  for (const entry of rawResults) {
+    if (!entry.tool.startsWith("run_")) continue;
+    const values = Array.isArray(entry.result) ? entry.result : [entry.result];
+    for (const value of values) {
+      const metadata = {
+        category: entry.tool.replace(/^run_/, ""),
+        owasp: null,
+        impact: "This scanner observation requires developer review.",
+        remediation: "Review the evidence and verify the behavior manually.",
+        codeExample: null
       };
+      normalizedFindings.push({
+        title: value?.finding || "Security observation",
+        severity: String(value?.severity || "LOW").toLowerCase(),
+        confidence: /strong|error detected|no access control/i.test(value?.finding || "") ? 0.82 : /possible|differs|anomaly|interesting/i.test(value?.finding || "") ? 0.58 : 0.35,
+        category: metadata.category,
+        evidence: { sourceTools: [entry.tool], summary: value?.finding || "Scanner returned an observation." },
+        impact: metadata.impact,
+        remediation: metadata.remediation,
+        manualVerification: true,
+        owasp: metadata.owasp,
+        codeExample: metadata.codeExample
+      });
     }
+  }
 
-    const outputs = [];
-    for (const call of calls) {
-      const args = JSON.parse(call.arguments || "{}");
-      const result = await executeTool(call.name, args, allowedTools);
-      toolResults.push({ name: call.name, result });
-      outputs.push({ type: "function_call_output", call_id: call.call_id, output: JSON.stringify(result) });
+  let executiveSummary = normalizedFindings.length
+    ? `The approved assessment completed with ${normalizedFindings.length} evidence-backed observation(s). Review heuristic results manually before remediation.`
+    : "The approved assessment completed without evidence-backed findings.";
+
+  if (hasGeminiKey()) {
+    try {
+      const compactFindings = normalizedFindings.slice(0, 40).map((finding) => ({
+        title: finding.title,
+        severity: finding.severity,
+        category: finding.category,
+        evidence: finding.evidence.summary
+      }));
+
+      const result = await generateGeminiText([
+        "You are BugHunter's security-report summarizer.",
+        "Do not invent vulnerabilities or modify the supplied findings.",
+        "Return JSON with exactly one property: executiveSummary.",
+        "Keep it concise and factual. State that the observations are evidence-backed and heuristic findings should be manually verified.",
+        JSON.stringify({ targetUrl: plan.targetUrl, userRequest: message, findings: compactFindings })
+      ].join("\n"));
+
+      const parsed = JSON.parse(result);
+      if (typeof parsed.executiveSummary === "string" && parsed.executiveSummary.trim()) {
+        executiveSummary = parsed.executiveSummary.trim();
+      }
+    } catch (_geminiError) {
+      // Deterministic summary remains available when the fallback model fails.
     }
+  }
 
-    response = await client.responses.create({
+  return {
+    executiveSummary,
+    findings: normalizedFindings,
+    report: { markdown: reportMarkdown(normalizedFindings) },
+    toolResults: rawResults
+  };
+}
+
+async function runToolLoop({ message, plan, client: suppliedClient }) {
+  const client = suppliedClient || (process.env.OPENAI_API_KEY ? getOpenAIClient() : null);
+
+  if (!client) {
+    if (!hasGeminiKey()) {
+      throw new Error("Configure an AI provider key on the server before starting an approved assessment.");
+    }
+    return runGeminiFallback({ message, plan });
+  }
+
+  try {
+    const allowedTools = plan.toolNames;
+    const tools = functionTools.filter((tool) => allowedTools.includes(tool.name));
+    const toolResults = [];
+    let response = await client.responses.create({
       model: getModel(),
-      previous_response_id: response.id,
-      input: outputs,
+      instructions: SECURITY_ASSISTANT_PROMPT,
+      input: `User request: ${message}\nAuthorized target: ${plan.targetUrl}\nApproved plan: ${JSON.stringify(plan.checks)}\nUse tools to collect evidence before producing findings.`,
       tools,
       tool_choice: "auto",
       parallel_tool_calls: false,
       text: { format: { type: "json_schema", name: "bughunter_security_assessment", strict: true, schema: finalAssessmentSchema } }
     });
-  }
 
-  throw new Error("The assistant exceeded the maximum tool-call rounds.");
+    for (let round = 0; round < 12; round += 1) {
+      const calls = (response.output || []).filter((item) => item.type === "function_call");
+      if (!calls.length) {
+        const assessment = parseAssessment(response);
+        const executedToolNames = toolResults.map((result) => result.name);
+        const findings = keepEvidenceBackedFindings(assessment, executedToolNames);
+        return {
+          executiveSummary: assessment.executiveSummary,
+          findings,
+          report: { markdown: reportMarkdown(findings) },
+          toolResults
+        };
+      }
+
+      const outputs = [];
+      for (const call of calls) {
+        const args = JSON.parse(call.arguments || "{}");
+        const result = await executeTool(call.name, args, allowedTools);
+        toolResults.push({ name: call.name, result });
+        outputs.push({ type: "function_call_output", call_id: call.call_id, output: JSON.stringify(result) });
+      }
+
+      response = await client.responses.create({
+        model: getModel(),
+        previous_response_id: response.id,
+        input: outputs,
+        tools,
+        tool_choice: "auto",
+        parallel_tool_calls: false,
+        text: { format: { type: "json_schema", name: "bughunter_security_assessment", strict: true, schema: finalAssessmentSchema } }
+      });
+    }
+
+    throw new Error("The assistant exceeded the maximum tool-call rounds.");
+  } catch (openaiError) {
+    if (!suppliedClient && hasGeminiKey()) return runGeminiFallback({ message, plan });
+    throw openaiError;
+  }
 }
 
 async function handleAssistantMessage(input) {
