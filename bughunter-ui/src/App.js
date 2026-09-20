@@ -9,12 +9,14 @@ import {
   Globe2,
   LayoutDashboard,
   LockKeyhole,
+  Moon,
   Play,
   Search,
   ScanLine,
   Settings,
   ShieldCheck,
   Sparkles,
+  Sun,
   Target,
   Wrench
 } from "lucide-react";
@@ -75,6 +77,7 @@ function App() {
   const [findingQuery, setFindingQuery] = useState("");
   const [severityFilter, setSeverityFilter] = useState("all");
   const [expandedFinding, setExpandedFinding] = useState(null);
+  const [showSeverityFilters, setShowSeverityFilters] = useState(true);
 
   const severityCounts = useMemo(() => {
     const counts = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
@@ -154,15 +157,31 @@ function App() {
             <ChevronDown size={14} />
           </div>
 
-          <button className="reference-search" onClick={() => {
-            const input = document.querySelector(".reference-assistant .chat-input textarea");
-            input?.scrollIntoView({ behavior: "smooth", block: "center" });
-            input?.focus();
-          }}>
+          <div className="reference-search">
             <Search size={15} />
-            <span>Search targets, findings, or tools...</span>
+            <input
+              aria-label="Search targets, findings, or tools"
+              value={findingQuery}
+              onChange={(event) => setFindingQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter") return;
+                const query = findingQuery.trim().toLowerCase();
+                if (!query) {
+                  document.querySelector(".reference-assistant .chat-input textarea")?.focus();
+                  return;
+                }
+                const target = findings.some((finding) =>
+                  [finding.title, finding.category, finding.evidence?.summary, ...(finding.evidence?.sourceTools || [])]
+                    .join(" ")
+                    .toLowerCase()
+                    .includes(query)
+                ) ? "findings" : "scanners";
+                scrollTo(target);
+              }}
+              placeholder="Search targets, findings, or tools..."
+            />
             <kbd>⌘ K</kbd>
-          </button>
+          </div>
 
           <div className="reference-top-actions">
             <button
@@ -284,19 +303,31 @@ function App() {
               <div className="reference-section-title"><span className="section-icon violet"><FileText size={16} /></span><div><strong>Findings</strong><small>Evidence-backed results from completed scans.</small></div></div>
               <div className="reference-findings-actions">
                 <div className="finding-search"><Search size={13} /><input value={findingQuery} onChange={(event) => setFindingQuery(event.target.value)} placeholder="Search findings..." /></div>
-                <button type="button" className="findings-filter-button"><Filter size={13} /></button>
-                <button type="button" className="findings-export" onClick={() => scrollTo("reports")}><Download size={13} /> Export Report</button>
+                <button type="button" className={`findings-filter-button ${showSeverityFilters ? "active" : ""}`} onClick={() => setShowSeverityFilters((value) => !value)} aria-label="Toggle severity filters"><Filter size={13} /></button>
+                <button type="button" className="findings-export" onClick={() => {
+                  const markdown = assistant.assessment?.report?.markdown;
+                  if (!markdown) {
+                    scrollTo("reports");
+                    return;
+                  }
+                  const href = URL.createObjectURL(new Blob([markdown], { type: "text/markdown" }));
+                  const link = document.createElement("a");
+                  link.href = href;
+                  link.download = "bughunter-ai-report.md";
+                  link.click();
+                  URL.revokeObjectURL(href);
+                }}><Download size={13} /> Export Report</button>
               </div>
             </div>
 
-            <div className="severity-filters">
+            {showSeverityFilters && <div className="severity-filters">
               {severityOrder.map((severity) => (
                 <button key={severity} type="button" className={severityFilter === severity ? "selected" : ""} onClick={() => setSeverityFilter(severity)}>
                   {severity === "all" ? "All" : severity.charAt(0).toUpperCase() + severity.slice(1)}
                   <span>{severity === "all" ? findings.length : severityCounts[severity]}</span>
                 </button>
               ))}
-            </div>
+            </div>}
 
             <div className="findings-table-wrap">
               <table className="findings-table">
