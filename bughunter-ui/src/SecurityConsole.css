@@ -2635,3 +2635,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Readability pass: increase working text without changing the visual language. */
+.reference-app .reference-nav-item { font-size: 13px; }
+.reference-app .reference-logo strong { font-size: 16px; }
+.reference-app .reference-logo small { font-size: 8px; }
+.reference-app .reference-user strong { font-size: 10px; }
+.reference-app .reference-user small { font-size: 9px; }
+.reference-app .workspace-switcher span { font-size: 8px; }
+.reference-app .workspace-switcher strong { font-size: 11px; }
+.reference-app .reference-search input { font-size: 10px; }
+.reference-app .reference-ready { font-size: 9px; }
+.reference-app .reference-hero-copy p { font-size: 14px; }
+.reference-app .reference-engine-head { font-size: 10px; }
+.reference-app .reference-engine-grid small { font-size: 8px; }
+.reference-app .reference-engine-grid b { font-size: 10px; }
+.reference-app .assistant-tab { font-size: 11px; }
+.reference-app .assistant-clear { font-size: 10px; }
+.reference-app .message p { font-size: 12px; }
+.reference-app .chat-input textarea { font-size: 12px; }
+.reference-app .suggestion-row button { font-size: 8px; }
+.reference-app .reference-card-head { font-size: 10px; }
+.reference-app .reference-card-head small { font-size: 8px; }
+.reference-app .reference-step strong { font-size: 11px; }
+.reference-app .reference-step small { font-size: 9px; }
+.reference-app .reference-step em { font-size: 8px; }
+.reference-app .tool-status strong { font-size: 9px; }
+.reference-app .tool-status small { font-size: 8px; }
+.reference-app .reference-section-title strong { font-size: 13px; }
+.reference-app .reference-section-title small { font-size: 8px; }
+.reference-app .findings-table td { font-size: 9px; }
+.reference-app .findings-table td strong { font-size: 10px; }
+.reference-app .findings-table td > small { font-size: 8px; }
+.reference-app .findings-table th { font-size: 8px; }
+.reference-app .severity-filters button { font-size: 8px; }
+.reference-app .finding-search input { font-size: 9px; }
+.reference-app .findings-export { font-size: 9px; }
+.reference-app .reference-approval-body h2 { font-size: 21px !important; }
+.reference-app .reference-approval-body > p { font-size: 12px !important; }
+.reference-app .reference-scope-option .scope-option-title { font-size: 11px; }
+.reference-app .reference-scope-option .scope-option-copy { font-size: 9px; }
+.reference-app .reference-approval-note { font-size: 9px; }
+.reference-app .reference-primary-button { font-size: 10px; }
+.reference-app .scanner-section-head h2 { font-size: 15px; }
+.reference-app .scanner-section-head p { font-size: 8px; }
+.reference-app .scanner-field span { font-size: 7px; }
+.reference-app .scanner-field input, .reference-app .scanner-field select { font-size: 10px; }
+.reference-app .scanner-run-button { font-size: 8px; }
+.reference-app .scanner-module-strip button { font-size: 8px; }
+
+@media (max-width: 900px) {
+  .reference-app .reference-hero-copy p { font-size: 13px; }
+}
