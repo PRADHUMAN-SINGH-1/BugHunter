@@ -3394,3 +3394,86 @@ html.bughunter-dark .reference-app {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* Place the Assessment Engine directly inside the Scan / Validate / Strengthen visual area. */
+.reference-hero-visual {
+  position: relative;
+  min-width: 0;
+  display: block;
+  width: 100%;
+  height: 190px;
+}
+.reference-hero-art.reference-floating-art {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 190px;
+  margin: 0;
+}
+.reference-hero-art .reference-note {
+  top: 8px;
+  right: 18px;
+  z-index: 2;
+}
+.reference-engine.hero-engine {
+  position: absolute;
+  right: 0;
+  top: 72px;
+  width: 245px;
+  margin: 0;
+  z-index: 4;
+  box-shadow: 0 12px 26px rgba(31,37,51,.08);
+}
+.reference-engine.hero-engine .reference-engine-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.reference-engine.hero-engine .reference-engine-grid > div {
+  min-height: 56px;
+}
+.reference-engine.hero-engine .reference-engine-grid small {
+  margin-top: 5px;
+}
+@media (max-width: 1180px) {
+  .reference-hero-visual {
+    height: 180px;
+  }
+  .reference-hero-art.reference-floating-art {
+    height: 180px;
+  }
+  .reference-engine.hero-engine {
+    width: 225px;
+    top: 70px;
+  }
+}
+@media (max-width: 900px) {
+  .reference-hero-visual {
+    width: 100%;
+    height: 175px;
+    margin-top: 8px;
+  }
+  .reference-hero-art.reference-floating-art {
+    height: 175px;
+  }
+  .reference-engine.hero-engine {
+    right: 8px;
+    top: 66px;
+    width: 230px;
+  }
+}
+@media (max-width: 680px) {
+  .reference-hero-visual {
+    height: 300px;
+  }
+  .reference-hero-art.reference-floating-art {
+    height: 300px;
+  }
+  .reference-engine.hero-engine {
+    top: 165px;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  .reference-engine.hero-engine .reference-engine-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
