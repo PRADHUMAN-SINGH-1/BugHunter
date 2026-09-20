@@ -138,19 +138,6 @@ function App() {
   return (
     <div className={`reference-app editorial-app ${darkMode ? "theme-dark" : ""}`}>
       <aside className="reference-sidebar">
-        <section className="sidebar-engine" aria-label="Assessment Engine">
-          <div className="sidebar-engine-head">
-            <span><Wrench size={12} /> Assessment Engine</span>
-            <strong><i /> Online</strong>
-          </div>
-          <div className="sidebar-engine-list">
-            <div><LockKeyhole size={12} /><span>Authorization</span><b>Enforced</b></div>
-            <div><Globe2 size={12} /><span>Network</span><b>Controlled</b></div>
-            <div><FileText size={12} /><span>Evidence</span><b>Tool-backed</b></div>
-            <div><Sparkles size={12} /><span>AI Assistant</span><b>Active</b></div>
-          </div>
-        </section>
-
         <a href="#workspace" className="reference-logo" aria-label="BugHunter AI home">
           <span className="reference-logo-mark"><ShieldCheck size={20} /></span>
           <span>
@@ -248,11 +235,26 @@ function App() {
               <p>Describe a target. Approve the plan. Let BugHunter collect evidence-backed findings and turn them into work your team can act on.</p>
             </div>
 
-            <div className="reference-hero-art reference-floating-art" aria-hidden="true">
-              <div className="reference-note">Scan.<br />Validate.<br />Strengthen.</div>
-              <div className="reference-ribbon ribbon-one" />
-              <div className="reference-ribbon ribbon-two" />
-              <div className="reference-arrow" />
+            <div className="reference-hero-visual">
+              <div className="reference-hero-art reference-floating-art" aria-hidden="true">
+                <div className="reference-note">Scan.<br />Validate.<br />Strengthen.</div>
+                <div className="reference-ribbon ribbon-one" />
+                <div className="reference-ribbon ribbon-two" />
+                <div className="reference-arrow" />
+              </div>
+
+              <section className="reference-engine hero-engine" aria-label="Assessment Engine">
+                <div className="reference-engine-head">
+                  <span><Wrench size={13} /> Assessment Engine</span>
+                  <strong><i /> Online</strong>
+                </div>
+                <div className="reference-engine-grid">
+                  <div><span><LockKeyhole size={14} /></span><small>Authorization</small><b>Enforced</b></div>
+                  <div><span><Globe2 size={14} /></span><small>Network</small><b>Controlled</b></div>
+                  <div><span><FileText size={14} /></span><small>Evidence</small><b>Tool-backed</b></div>
+                  <div><span><Sparkles size={14} /></span><small>AI Assistant</small><b>Active</b></div>
+                </div>
+              </section>
             </div>
 
           </section>
