@@ -1,6 +1,7 @@
 import { Activity, CheckCircle2, Play, ShieldCheck, Terminal } from "lucide-react";
 import "./App.css";
 import "./Redesign.css";
+import "./ProductConsole.css";
 import { AdvancedScanners } from "./components/AdvancedScanners";
 import { ApprovalCard } from "./components/ApprovalCard";
 import { AssistantChat } from "./components/AssistantChat";
