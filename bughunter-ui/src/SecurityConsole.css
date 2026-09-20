@@ -3873,3 +3873,122 @@ html.bughunter-dark .reference-app {
     width: 100% !important;
   }
 }
+
+/* FINAL FIX — keep Assessment Engine beside the Scan / Validate / Strengthen artwork,
+   fully inside the hero so it cannot overlap Assessment Workflow. */
+.reference-hero {
+  min-height: 170px !important;
+  grid-template-columns: minmax(0, 1fr) minmax(470px, 560px) !important;
+  align-items: center !important;
+  padding-bottom: 12px !important;
+}
+
+.reference-hero-visual {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 245px !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  height: 155px !important;
+  min-height: 155px !important;
+  overflow: visible !important;
+}
+
+.reference-hero-art.reference-floating-art {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 155px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+.reference-hero-art .reference-note {
+  top: 8px !important;
+  right: 8px !important;
+}
+
+.reference-engine.hero-engine {
+  position: relative !important;
+  inset: auto !important;
+  width: 245px !important;
+  margin: 0 !important;
+  z-index: 3 !important;
+  align-self: center !important;
+  justify-self: end !important;
+  box-shadow: 0 10px 24px rgba(31,37,51,.07) !important;
+}
+
+.reference-engine.hero-engine .reference-engine-grid {
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+}
+
+.reference-engine.hero-engine .reference-engine-grid > div {
+  min-height: 54px !important;
+}
+
+.reference-main-grid {
+  margin-top: 8px !important;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1180px) {
+  .reference-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(430px, 500px) !important;
+  }
+  .reference-hero-visual {
+    grid-template-columns: minmax(0,1fr) 220px !important;
+    gap: 10px !important;
+  }
+  .reference-engine.hero-engine {
+    width: 220px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .reference-hero {
+    display: block !important;
+    min-height: 0 !important;
+    padding-bottom: 12px !important;
+  }
+
+  .reference-hero-visual {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 220px !important;
+    height: 150px !important;
+    min-height: 150px !important;
+    margin-top: 8px !important;
+  }
+
+  .reference-hero-art.reference-floating-art {
+    height: 150px !important;
+  }
+
+  .reference-engine.hero-engine {
+    width: 220px !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .reference-hero-visual {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    min-height: 0 !important;
+    gap: 9px !important;
+  }
+
+  .reference-hero-art.reference-floating-art {
+    height: 105px !important;
+  }
+
+  .reference-engine.hero-engine {
+    width: 100% !important;
+    justify-self: stretch !important;
+  }
+
+  .reference-engine.hero-engine .reference-engine-grid {
+    grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+  }
+}
