@@ -4,6 +4,13 @@ const { createDemoAssessment } = require("../demo/demoAssessment");
 
 const assistantRoutes = express.Router();
 
+assistantRoutes.get("/health", (_req, res) => {
+  res.json({
+    status: "ok",
+    aiConfigured: Boolean(process.env.OPENAI_API_KEY || process.env.FALLBACK_AI_API_KEY || process.env.GOOGLE_API_KEY)
+  });
+});
+
 assistantRoutes.post("/message", async (req, res) => {
   const response = await handleAssistantMessage(req.body || {});
   const statusCode = response.status === "error" ? 400 : 200;
