@@ -3268,3 +3268,129 @@ html.bughunter-dark .reference-app {
 .editorial-app.theme-dark .sidebar-engine-list b {
   color: #eef1f7;
 }
+
+/* Correct hero composition:
+   Scan / Validate / Strengthen artwork on the left,
+   Assessment Engine immediately to its right. */
+.reference-hero {
+  min-height: 178px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(470px, 560px);
+  gap: 24px;
+  align-items: center;
+  position: relative;
+  padding: 8px 0 16px;
+}
+
+.reference-hero-copy {
+  min-width: 0;
+  padding-left: 10px;
+}
+
+.reference-hero-visual {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 205px;
+  gap: 14px;
+  align-items: center;
+}
+
+.reference-hero-art.reference-floating-art {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 150px;
+  margin: 0;
+}
+
+.reference-hero-art .reference-note {
+  top: 18px;
+  right: 4px;
+}
+
+.reference-hero-art .reference-ribbon {
+  right: 8px;
+}
+
+.reference-hero-art .reference-arrow {
+  right: 12px;
+}
+
+.reference-engine.hero-engine {
+  position: relative;
+  width: 205px;
+  margin: 0;
+  align-self: center;
+}
+
+.reference-engine.hero-engine .reference-engine-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.reference-engine.hero-engine .reference-engine-grid > div {
+  min-height: 61px;
+}
+
+.reference-engine.hero-engine .reference-engine-grid small {
+  margin-top: 6px;
+}
+
+/* The right rail is only workflow + live execution. */
+.reference-right-rail {
+  grid-template-columns: 1fr;
+}
+
+/* Keep sidebar clean: no engine panel there. */
+.reference-sidebar .sidebar-engine {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .reference-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(430px, 500px);
+    gap: 16px;
+  }
+  .reference-hero-visual {
+    grid-template-columns: minmax(190px, 1fr) 190px;
+    gap: 10px;
+  }
+  .reference-engine.hero-engine {
+    width: 190px;
+  }
+}
+
+@media (max-width: 900px) {
+  .reference-hero {
+    display: block;
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+
+  .reference-hero-visual {
+    margin-top: 8px;
+    grid-template-columns: minmax(0, 1fr) 200px;
+  }
+
+  .reference-hero-art.reference-floating-art {
+    height: 120px;
+  }
+}
+
+@media (max-width: 680px) {
+  .reference-hero-visual {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .reference-hero-art.reference-floating-art {
+    height: 105px;
+  }
+
+  .reference-engine.hero-engine {
+    width: 100%;
+  }
+
+  .reference-engine.hero-engine .reference-engine-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
