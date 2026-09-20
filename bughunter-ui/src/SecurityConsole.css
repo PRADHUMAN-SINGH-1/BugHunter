@@ -2897,3 +2897,19 @@ html.bughunter-dark .reference-logo small {
 .reference-app.theme-dark .reference-section-title small {
   color: #aab4c5;
 }
+
+.linkedin-mark {
+  width: 21px;
+  height: 21px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 4px;
+  background: #0a66c2;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: Arial, sans-serif;
+}
+.reference-linkedin:hover .linkedin-mark {
+  background: #004182;
+}
