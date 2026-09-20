@@ -2913,3 +2913,234 @@ html.bughunter-dark .reference-logo small {
 .reference-linkedin:hover .linkedin-mark {
   background: #004182;
 }
+
+/* Final hierarchy pass: hero -> assistant directly, engine -> workflow rail, larger readable UI. */
+.reference-content {
+  position: relative;
+}
+
+.reference-hero {
+  min-height: 136px;
+  display: block;
+  position: relative;
+  padding: 10px 0 14px;
+}
+
+.reference-hero-copy {
+  max-width: 780px;
+  padding: 0 0 0 10px;
+}
+
+.reference-hero h1 {
+  font-size: clamp(48px, 5.2vw, 72px);
+  line-height: .96;
+  letter-spacing: -3.2px;
+}
+
+.reference-hero-copy p {
+  max-width: 760px;
+  margin: 12px 0 0;
+  font-size: 15px !important;
+  line-height: 1.58;
+  color: #273653 !important;
+  font-weight: 520;
+}
+
+.reference-floating-art {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  width: 390px;
+  height: 175px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.reference-engine-rail {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.reference-right-rail {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.reference-main-grid {
+  margin-top: 8px;
+}
+
+/* Make operational text feel like a product UI rather than micro-labels. */
+.reference-app .reference-nav-item {
+  font-size: 14px;
+  font-weight: 700;
+  color: #283654;
+}
+.reference-app .reference-logo strong { font-size: 17px; }
+.reference-app .reference-user strong { font-size: 11px; }
+.reference-app .reference-user small { font-size: 9px; color: #65718a; }
+.reference-app .workspace-switcher span { font-size: 8px; }
+.reference-app .workspace-switcher strong { font-size: 12px; }
+.reference-app .reference-search input { font-size: 11px; }
+.reference-app .reference-search input::placeholder { color: #707c92; }
+.reference-app .reference-engine-head { font-size: 11px; }
+.reference-app .reference-engine-head strong { font-size: 9px; }
+.reference-app .reference-engine-grid small { font-size: 9px; }
+.reference-app .reference-engine-grid b { font-size: 10px; }
+.reference-app .assistant-tab { font-size: 12px; font-weight: 700; }
+.reference-app .assistant-clear { font-size: 10px; }
+.reference-app .message p { font-size: 13px; line-height: 1.58; font-weight: 500; }
+.reference-app .chat-input textarea { font-size: 13px; }
+.reference-app .suggestion-row button { font-size: 9px; }
+.reference-app .reference-card-head { font-size: 11px; }
+.reference-app .reference-card-head small { font-size: 8px; }
+.reference-app .reference-step strong { font-size: 12px; }
+.reference-app .reference-step small { font-size: 9px; color: #69758c; }
+.reference-app .reference-step em { font-size: 8px; }
+.reference-app .tool-status strong { font-size: 10px; }
+.reference-app .tool-status small { font-size: 8px; color: #6c7890; }
+.reference-app .reference-section-title strong { font-size: 14px; }
+.reference-app .reference-section-title small { font-size: 9px; }
+.reference-app .finding-search input { font-size: 10px; }
+.reference-app .findings-table td { font-size: 10px; }
+.reference-app .findings-table td strong { font-size: 11px; }
+.reference-app .findings-table td > small { font-size: 8px; }
+.reference-app .findings-table th { font-size: 8px; }
+.reference-app .severity-filters button { font-size: 9px; }
+.reference-app .scanner-section-head h2 { font-size: 17px; }
+.reference-app .scanner-section-head p { font-size: 9px; }
+.reference-app .scanner-field span { font-size: 8px; }
+.reference-app .scanner-field input,
+.reference-app .scanner-field select { font-size: 11px; }
+.reference-app .scanner-run-button { font-size: 9px; }
+.reference-app .scanner-module-strip button { font-size: 9px; }
+
+/* High-quality LinkedIn profile mark: no initials avatar. */
+.reference-linkedin {
+  grid-template-columns: 32px minmax(0, 1fr);
+  display: grid !important;
+  align-items: center;
+  gap: 9px;
+}
+.linkedin-avatar {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #0a66c2;
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(10,102,194,.18);
+}
+.linkedin-avatar svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+.reference-app .reference-linkedin:hover {
+  background: #f4f2ed;
+}
+
+/* Make theme change unmistakable. */
+html.bughunter-dark,
+html.bughunter-dark body {
+  color-scheme: dark;
+  background: #0d1016 !important;
+}
+html.bughunter-dark .reference-app {
+  background: #0d1016;
+}
+.editorial-app.theme-dark .reference-topbar {
+  background: #151922 !important;
+}
+.editorial-app.theme-dark .reference-hero {
+  border-color: #2a2e39;
+}
+.editorial-app.theme-dark .reference-hero-copy p {
+  color: #c4ccda !important;
+}
+.editorial-app.theme-dark .reference-nav-item {
+  color: #e7ebf3;
+}
+.editorial-app.theme-dark .reference-nav-item.active {
+  color: #b9adff;
+}
+.editorial-app.theme-dark .reference-search input {
+  color: #f1f4fa;
+}
+.editorial-app.theme-dark .reference-search input::placeholder {
+  color: #8f9ab0;
+}
+.editorial-app.theme-dark .reference-card,
+.editorial-app.theme-dark .reference-engine-rail,
+.editorial-app.theme-dark .reference-assistant-card,
+.editorial-app.theme-dark .reference-findings,
+.editorial-app.theme-dark .reference-report-anchor .report-panel {
+  background: #151922 !important;
+}
+.editorial-app.theme-dark .reference-engine-grid > div,
+.editorial-app.theme-dark .reference-step > b {
+  background: #1c212b;
+}
+.editorial-app.theme-dark .reference-step strong,
+.editorial-app.theme-dark .tool-status strong,
+.editorial-app.theme-dark .reference-card-head,
+.editorial-app.theme-dark .reference-section-title strong,
+.editorial-app.theme-dark .reference-engine-head {
+  color: #f0f3f8;
+}
+.editorial-app.theme-dark .reference-step small,
+.editorial-app.theme-dark .tool-status small,
+.editorial-app.theme-dark .reference-card-head small,
+.editorial-app.theme-dark .reference-section-title small {
+  color: #a6b0c2;
+}
+.editorial-app.theme-dark .message p {
+  background: #1c212b;
+  border-color: #303541;
+  color: #e1e6ef;
+}
+.editorial-app.theme-dark .chat-input,
+.editorial-app.theme-dark .finding-search,
+.editorial-app.theme-dark .scanner-field input,
+.editorial-app.theme-dark .scanner-field select {
+  background: #11151d;
+  border-color: #343946;
+  color: #eef2f8;
+}
+.editorial-app.theme-dark .reference-linkedin:hover {
+  background: #1c202a;
+}
+
+@media (max-width: 900px) {
+  .reference-hero {
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+  .reference-floating-art {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    height: 95px;
+    margin-top: -4px;
+  }
+  .reference-engine-rail {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 680px) {
+  .reference-hero h1 {
+    font-size: 42px;
+    letter-spacing: -2px;
+  }
+  .reference-hero-copy p {
+    font-size: 13px !important;
+  }
+  .reference-app .reference-nav-item { font-size: 13px; }
+  .reference-app .message p { font-size: 12px; }
+  .reference-app .chat-input textarea { font-size: 12px; }
+}
