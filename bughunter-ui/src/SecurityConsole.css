@@ -2687,3 +2687,155 @@
 @media (max-width: 900px) {
   .reference-app .reference-hero-copy p { font-size: 13px; }
 }
+
+/* Final visual balance pass: keep the conversation close to the hero copy and increase readability. */
+.reference-hero {
+  min-height: 168px;
+  grid-template-rows: auto;
+  padding-bottom: 16px;
+}
+.reference-hero-copy {
+  align-self: center;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.reference-hero-copy p {
+  max-width: 760px;
+  margin-top: 12px;
+  font-size: 14px !important;
+  line-height: 1.6;
+}
+.reference-hero-art {
+  height: 150px;
+}
+.reference-engine {
+  align-self: center;
+}
+.reference-main-grid {
+  margin-top: 12px;
+}
+.reference-assistant-card,
+.reference-card,
+.reference-findings,
+.reference-report-anchor .report-panel,
+.editorial-app .advanced-scanners-section {
+  color: var(--ink);
+}
+.reference-app .reference-nav-item,
+.reference-app .reference-logo strong,
+.reference-app .reference-user strong,
+.reference-app .assistant-tab,
+.reference-app .message p,
+.reference-app .reference-card-head,
+.reference-app .reference-step strong,
+.reference-app .tool-status strong,
+.reference-app .reference-section-title strong,
+.reference-app .findings-table td,
+.reference-app .findings-table td strong,
+.reference-app .scanner-section-head h2 {
+  opacity: 1;
+}
+.reference-app .reference-nav-item {
+  color: #33405c;
+  font-weight: 700;
+}
+.reference-app .reference-nav-item svg {
+  color: #68748b;
+}
+.reference-app .reference-user {
+  position: relative;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+  border-radius: 8px;
+  margin: 0 -4px;
+  padding: 12px 8px 0;
+}
+.reference-app .reference-user:hover {
+  background: #f6f4ef;
+}
+.reference-app .reference-linkedin > svg {
+  margin-left: auto;
+  color: #0a66c2;
+  flex: 0 0 auto;
+}
+.reference-app.theme-dark .reference-linkedin:hover {
+  background: #1d212b;
+}
+.reference-app.theme-dark .reference-nav-item {
+  color: #d5dbe6;
+}
+.reference-app.theme-dark .reference-nav-item svg {
+  color: #9aa4b8;
+}
+.reference-app.theme-dark .reference-user:hover {
+  background: #1d212b;
+}
+.reference-app.theme-dark .reference-user > span {
+  background: #252a35;
+  color: #eef2f8;
+}
+.reference-app.theme-dark .reference-linkedin > svg {
+  color: #5ea1ee;
+}
+.reference-app.theme-dark,
+html.bughunter-dark body {
+  background: #0f1118;
+}
+html.bughunter-dark .reference-main {
+  background: #0f1118;
+}
+html.bughunter-dark .reference-topbar,
+html.bughunter-dark .reference-sidebar {
+  background: #151922;
+}
+html.bughunter-dark .reference-hero-copy p {
+  color: #aeb7c7;
+}
+html.bughunter-dark .reference-hero h1,
+html.bughunter-dark .reference-logo strong,
+html.bughunter-dark .reference-user strong,
+html.bughunter-dark .reference-nav-item,
+html.bughunter-dark .reference-card-head,
+html.bughunter-dark .reference-step strong,
+html.bughunter-dark .tool-status strong,
+html.bughunter-dark .reference-section-title strong {
+  color: #eef1f7;
+}
+html.bughunter-dark .reference-card,
+html.bughunter-dark .reference-findings,
+html.bughunter-dark .reference-assistant-card,
+html.bughunter-dark .reference-engine,
+html.bughunter-dark .reference-report-anchor .report-panel,
+html.bughunter-dark .editorial-app .advanced-scanners-section {
+  background: #151922 !important;
+  border-color: #2a2e39 !important;
+}
+html.bughunter-dark .assistant-tab,
+html.bughunter-dark .assistant-clear,
+html.bughunter-dark .reference-step small,
+html.bughunter-dark .tool-status small,
+html.bughunter-dark .reference-section-title small,
+html.bughunter-dark .reference-card-head small,
+html.bughunter-dark .reference-user small,
+html.bughunter-dark .reference-logo small {
+  color: #a1abbd;
+}
+@media (max-width: 900px) {
+  .reference-hero {
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+  .reference-hero-art {
+    display: none;
+  }
+  .reference-main-grid {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 680px) {
+  .reference-hero-copy p {
+    font-size: 13px !important;
+  }
+}
