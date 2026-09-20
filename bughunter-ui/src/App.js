@@ -1,207 +1,207 @@
 import {
   Activity,
-  ArrowRight,
+  BarChart3,
   CheckCircle2,
+  ChevronDown,
+  Download,
   FileText,
+  Filter,
+  Globe2,
   LayoutDashboard,
+  LockKeyhole,
   Play,
-  ScanLine,
   Search,
+  ScanLine,
   Settings,
   ShieldCheck,
   Sparkles,
   Target,
   Wrench
 } from "lucide-react";
+import { useMemo, useState } from "react";
 import "./App.css";
 import "./SecurityConsole.css";
 import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
 import { ApprovalCard } from "./components/ApprovalCard";
 import { AssistantChat } from "./components/AssistantChat";
 import { ExecutiveSummary } from "./components/ExecutiveSummary";
-import { FindingCard } from "./components/FindingCard";
 import { ProgressIndicator } from "./components/ProgressIndicator";
 import { ReportPanel } from "./components/ReportPanel";
 import { ScanTimeline } from "./components/ScanTimeline";
 import { useAssistant } from "./hooks/useAssistant";
 
+const scannerRows = [
+  ["scan", "Scan", "run_reflection_scan"],
+  ["headers", "Headers", "run_header_scan"],
+  ["idor", "IDOR", "run_idor_scan"],
+  ["params", "Parameters", "params"],
+  ["sensitive", "Sensitive Data", "run_sensitive_scan"],
+  ["endpoints", "Endpoints", "run_endpoint_discovery"],
+  ["crawl", "Crawl", "run_crawl"],
+  ["ratelimit", "Ratelimit", "ratelimit"],
+  ["auth", "Auth", "auth"],
+  ["sqli", "SQLi", "run_sqli_scan"]
+];
+
+const severityOrder = ["all", "critical", "high", "medium", "low", "info"];
+
+function getWorkflowStep({ assessment, gate, isWorking }) {
+  if (assessment) return 4;
+  if (isWorking && gate?.kind === "plan") return 3;
+  if (gate?.kind === "authorization" || gate?.kind === "scope") return 2;
+  return 1;
+}
+
+function findingStatus(finding) {
+  return finding?.manualVerification ? "Review" : "Open";
+}
+
+function severityKey(value) {
+  const normalized = String(value || "info").toLowerCase();
+  return ["critical", "high", "medium", "low"].includes(normalized) ? normalized : "info";
+}
+
 function App() {
   const assistant = useAssistant();
   const findings = assistant.assessment?.findings || [];
-  const highRiskCount = findings.filter((finding) =>
-    ["high", "critical"].includes(String(finding.severity).toLowerCase())
-  ).length;
+  const executedTools = assistant.assessment?.executedTools || [];
+  const workflowStep = getWorkflowStep(assistant);
+  const [findingQuery, setFindingQuery] = useState("");
+  const [severityFilter, setSeverityFilter] = useState("all");
+  const [expandedFinding, setExpandedFinding] = useState(null);
+
+  const severityCounts = useMemo(() => {
+    const counts = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
+    findings.forEach((finding) => { counts[severityKey(finding.severity)] += 1; });
+    return counts;
+  }, [findings]);
+
+  const filteredFindings = useMemo(() => {
+    const query = findingQuery.trim().toLowerCase();
+    return findings.filter((finding) => {
+      const matchesSeverity = severityFilter === "all" || severityKey(finding.severity) === severityFilter;
+      const haystack = [
+        finding.title,
+        finding.category,
+        finding.evidence?.summary,
+        finding.remediation,
+        ...(finding.evidence?.sourceTools || [])
+      ].join(" ").toLowerCase();
+      return matchesSeverity && (!query || haystack.includes(query));
+    });
+  }, [findings, findingQuery, severityFilter]);
+
+  const clearAssistant = () => {
+    assistant.reset();
+    setFindingQuery("");
+    setSeverityFilter("all");
+    setExpandedFinding(null);
+  };
+
+  const toolStatus = (toolName) => {
+    if (executedTools.includes(toolName)) return "Completed";
+    if (assistant.isWorking && workflowStep >= 3) return "Running";
+    return "Not run";
+  };
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
-    <div className="app-shell editorial-app">
-      <aside className="editorial-sidebar">
-        <a href="#workspace" className="editorial-logo" aria-label="BugHunter AI home">
-          <span className="editorial-logo-mark"><ShieldCheck size={18} /></span>
+    <div className="reference-app editorial-app">
+      <aside className="reference-sidebar">
+        <a href="#workspace" className="reference-logo" aria-label="BugHunter AI home">
+          <span className="reference-logo-mark"><ShieldCheck size={20} /></span>
           <span>
             <strong>BugHunter <em>AI</em></strong>
-            <small>SECURE WHAT YOU BUILD.</small>
+            <small>SECURE WHAT YOU BUILD</small>
           </span>
         </a>
 
-        <nav className="editorial-nav" aria-label="Primary navigation">
-          <a className="nav-item active" href="#workspace">
-            <LayoutDashboard size={16} /> Assessment
-          </a>
-          <a className="nav-item" href="#findings">
-            <Search size={16} /> Findings
-            <span>{findings.length}</span>
-          </a>
-          <a className="nav-item" href="#scanners">
-            <ScanLine size={16} /> Scanners
-          </a>
-          <a className="nav-item" href="#reports">
-            <FileText size={16} /> Reports
-          </a>
-          <a className="nav-item" href="#trust-boundary">
-            <Settings size={16} /> Trust & Safety
-          </a>
+        <nav className="reference-nav" aria-label="Primary">
+          <button className="reference-nav-item active" onClick={() => scrollTo("workspace")}><LayoutDashboard size={16} /> Assessment</button>
+          <button className="reference-nav-item" onClick={() => scrollTo("findings")}><Search size={16} /> Findings <span>{findings.length}</span></button>
+          <button className="reference-nav-item" onClick={() => scrollTo("scanners")}><ScanLine size={16} /> Scanners</button>
+          <button className="reference-nav-item" onClick={() => scrollTo("reports")}><FileText size={16} /> Reports</button>
+          <button className="reference-nav-item" onClick={() => scrollTo("trust-boundary")}><Settings size={16} /> Trust & Safety</button>
         </nav>
 
-        <div className="sidebar-quote">
-          <span>“Security is a feature,<br />not an afterthought.”</span>
+        <div className="reference-quote">
+          <div>“Security is a feature,<br />not an afterthought.”</div>
           <i />
           <small>Evidence first.</small>
         </div>
 
-        <div className="sidebar-user">
+        <div className="reference-user">
           <span>PS</span>
-          <div>
-            <strong>Security Engineer</strong>
-            <small>BugHunter workspace</small>
-          </div>
+          <div><strong>Pradhuman Singh</strong><small>Security Engineer</small></div>
         </div>
       </aside>
 
-      <div className="editorial-main">
-        <header className="editorial-topbar">
-          <div className="project-switcher">
+      <div className="reference-main">
+        <header className="reference-topbar">
+          <div className="workspace-switcher">
             <Target size={15} />
-            <div>
-              <span>WORKSPACE</span>
-              <strong>bug-hunter</strong>
-            </div>
-            <ArrowRight size={13} />
+            <div><span>WORKSPACE</span><strong>bug-hunter</strong></div>
+            <ChevronDown size={14} />
           </div>
 
-          <div className="topbar-center">
-            <div className="search-shell">
-              <Search size={15} />
-              <span>Search targets, findings, or tools</span>
-              <kbd>⌘ K</kbd>
-            </div>
-          </div>
+          <button className="reference-search" onClick={() => {
+            const input = document.querySelector(".reference-assistant .chat-input textarea");
+            input?.scrollIntoView({ behavior: "smooth", block: "center" });
+            input?.focus();
+          }}>
+            <Search size={15} />
+            <span>Search targets, findings, or tools...</span>
+            <kbd>⌘ K</kbd>
+          </button>
 
-          <div className="topbar-right">
-            <span className="ready-chip"><i /> System Ready</span>
-            <button className="demo-ghost" onClick={assistant.runDemo} disabled={assistant.isWorking}>
-              <Play size={12} fill="currentColor" />
-              {assistant.isWorking ? "Running" : "Run demo"}
-            </button>
+          <div className="reference-top-actions">
+            <button className="theme-control" type="button" aria-label="Theme"><span>☼</span><span>◐</span></button>
+            <span className="reference-ready"><i /> System Ready</span>
           </div>
         </header>
 
-        <main id="workspace" className="editorial-content">
-          <section className="editorial-hero">
-            <div className="hero-copy">
-              <div className="eyebrow editorial-eyebrow">
-                <Sparkles size={12} /> APPLICATION SECURITY WORKSPACE
-              </div>
+        <main id="workspace" className="reference-content">
+          <section className="reference-hero">
+            <div className="reference-hero-copy">
+              <div className="reference-eyebrow">APPLICATION SECURITY WORKSPACE</div>
               <h1>Turn security signals<br /><span>into real results.</span></h1>
               <p>Describe a target. Approve the plan. Let BugHunter collect evidence-backed findings and turn them into work your team can act on.</p>
+            </div>
 
-              <div className="hero-meta-row">
-                <span><i /> Controlled assessment</span>
-                <span><CheckCircle2 size={13} /> Evidence-backed output</span>
-                <span><ShieldCheck size={13} /> Authorization gated</span>
+            <div className="reference-hero-art" aria-hidden="true">
+              <div className="reference-note">Scan.<br />Validate.<br />Strengthen.</div>
+              <div className="reference-ribbon ribbon-one" />
+              <div className="reference-ribbon ribbon-two" />
+              <div className="reference-arrow" />
+            </div>
+
+            <section className="reference-engine">
+              <div className="reference-engine-head">
+                <span><Wrench size={13} /> Assessment Engine</span>
+                <strong><i /> Online</strong>
               </div>
-            </div>
-
-            <div className="hero-art" aria-hidden="true">
-              <div className="hero-art-note">scan.<br />validate.<br />strengthen.</div>
-              <div className="hero-art-line" />
-              <div className="hero-art-orbit orbit-a" />
-              <div className="hero-art-orbit orbit-b" />
-              <div className="hero-art-dot dot-a" />
-              <div className="hero-art-dot dot-b" />
-            </div>
-          </section>
-
-          <section className="target-bar">
-            <div className="target-bar-label"><Target size={14} /> TARGET</div>
-            <div className="target-field-display">
-              <span>Enter an authorized target in the assistant below</span>
-              <b>HTTP(S) only</b>
-            </div>
-            <button
-              type="button"
-              className="start-assessment-button"
-              onClick={() => {
-                const input = document.querySelector(".assistant-column .chat-input textarea");
-                input?.scrollIntoView({ behavior: "smooth", block: "center" });
-                input?.focus();
-              }}
-            >
-              Start with assistant <ArrowRight size={14} />
-            </button>
-          </section>
-
-          <section className="status-grid">
-            <article>
-              <div><span>WORKFLOW</span><LayoutDashboard size={15} /></div>
-              <strong>Guided</strong>
-              <small>Describe → authorize → approve → scan</small>
-            </article>
-            <article>
-              <div><span>EVIDENCE</span><Wrench size={15} /></div>
-              <strong>Deterministic</strong>
-              <small>Scanner-backed results only</small>
-            </article>
-            <article>
-              <div><span>FINDINGS</span><Activity size={15} /></div>
-              <strong>{findings.length}</strong>
-              <small>{highRiskCount} high / critical</small>
-            </article>
-            <article>
-              <div><span>MODE</span><ShieldCheck size={15} /></div>
-              <strong>Non-destructive</strong>
-              <small>Active checks require approval</small>
-            </article>
-          </section>
-
-          <ProgressIndicator isWorking={assistant.isWorking} />
-
-          {assistant.error && (
-            <div className="editorial-error error-banner" role="alert">
-              <strong>Assessment paused.</strong>
-              <span>{assistant.error}</span>
-              <span>Verify authorization, target scope, or server configuration.</span>
-            </div>
-          )}
-
-          <section className="workspace-layout">
-            <div className="assistant-column">
-              <div className="section-heading-row">
-                <div>
-                  <span className="section-number">01</span>
-                  <div>
-                    <strong>AI SECURITY ASSISTANT</strong>
-                    <small>Plan, authorize, and interpret evidence.</small>
-                  </div>
-                </div>
-                <span className="section-live"><i /> {assistant.isWorking ? "Working" : "Ready"}</span>
+              <div className="reference-engine-grid">
+                <div><span><LockKeyhole size={14} /></span><small>Authorization</small><b>Enforced</b></div>
+                <div><span><Globe2 size={14} /></span><small>Network</small><b>Controlled</b></div>
+                <div><span><FileText size={14} /></span><small>Evidence</small><b>Tool-backed</b></div>
+                <div><span><Sparkles size={14} /></span><small>AI Assistant</small><b>Active</b></div>
               </div>
+            </section>
+          </section>
 
-              <AssistantChat
-                messages={assistant.messages}
-                onSend={assistant.sendMessage}
-                isWorking={assistant.isWorking}
-              />
-
+          <section className="reference-main-grid">
+            <div className="reference-assistant-column">
+              <section className="reference-assistant-card">
+                <AssistantChat
+                  messages={assistant.messages}
+                  onSend={assistant.sendMessage}
+                  isWorking={assistant.isWorking}
+                  onClear={clearAssistant}
+                />
+              </section>
               <ApprovalCard
                 gate={assistant.gate}
                 scanPlan={assistant.scanPlan}
@@ -212,100 +212,129 @@ function App() {
               />
             </div>
 
-            <aside className="editorial-rail">
-              <section className="editorial-card workflow-card">
-                <div className="card-title-row">
-                  <span>ASSESSMENT WORKFLOW</span>
-                  <span>STEP 1 OF 4</span>
+            <aside className="reference-right-rail">
+              <section className="reference-card workflow-reference">
+                <div className="reference-card-head">
+                  <span><LayoutDashboard size={14} /> Assessment Workflow</span>
+                  <small>Step {workflowStep} of 4</small>
                 </div>
 
-                <div className="editorial-workflow">
-                  <div className="workflow-node active">
-                    <b>1</b><span><strong>Describe</strong><small>Define target + security goal</small></span>
-                  </div>
-                  <div className="workflow-node">
-                    <b>2</b><span><strong>Authorize</strong><small>Confirm ownership + permissions</small></span>
-                  </div>
-                  <div className="workflow-node">
-                    <b>3</b><span><strong>Approve</strong><small>Review the exact scan plan</small></span>
-                  </div>
-                  <div className="workflow-node">
-                    <b>4</b><span><strong>Review</strong><small>Inspect evidence + remediation</small></span>
-                  </div>
+                <div className="reference-step-list">
+                  {[
+                    ["Describe", "Define the target and security goal"],
+                    ["Authorize", "Confirm ownership and permissions"],
+                    ["Collect", "Execute authorized checks"],
+                    ["Review", "Inspect evidence and remediation"]
+                  ].map(([label, detail], index) => {
+                    const step = index + 1;
+                    const state = step < workflowStep ? "complete" : step === workflowStep ? "active" : "pending";
+                    return (
+                      <div className={`reference-step ${state}`} key={label}>
+                        <b>{step}</b>
+                        <span><strong>{label}</strong><small>{detail}</small></span>
+                        <em>{state === "complete" ? "Done" : state === "active" ? "In progress" : "Pending"}</em>
+                      </div>
+                    );
+                  })}
                 </div>
               </section>
 
-              <ScanTimeline
-                timeline={assistant.timeline}
-                visible={assistant.isWorking || Boolean(assistant.assessment)}
-              />
-
-              <section className="editorial-card trust-card" id="trust-boundary">
-                <div className="card-title-row"><span>TRUST & SAFETY</span><span>BUILT IN</span></div>
-                <div className="trust-note"><CheckCircle2 size={14} /> Findings require executed scanner evidence.</div>
-                <div className="trust-note"><CheckCircle2 size={14} /> Active testing requires explicit approval.</div>
-                <div className="trust-note"><CheckCircle2 size={14} /> Reports are generated from observed results.</div>
+              <section className="reference-card tool-reference">
+                <div className="reference-card-head">
+                  <span><Activity size={14} /> Live Tool Execution</span>
+                  <small>{assistant.isWorking ? "Running" : "Idle"}</small>
+                </div>
+                <div className="tool-grid">
+                  {scannerRows.map(([key, label, backendTool]) => (
+                    <div key={key} className={`tool-status tool-status-${toolStatus(backendTool).toLowerCase().replace(/\\s+/g, "-")}`}>
+                      <span className="tool-status-icon">{key === "scan" ? <Search size={12} /> : key === "crawl" ? <Globe2 size={12} /> : key === "headers" ? <ShieldCheck size={12} /> : <ScanLine size={12} />}</span>
+                      <strong>{label}</strong>
+                      <small>{toolStatus(backendTool)}</small>
+                    </div>
+                  ))}
+                </div>
               </section>
             </aside>
           </section>
 
-          {assistant.assessment && (
-            <section className="editorial-results" id="findings">
-              <div className="results-headline">
-                <div>
-                  <span className="section-number">02</span>
-                  <div>
-                    <strong>ASSESSMENT RESULTS</strong>
-                    <small>Evidence-backed findings from completed scans.</small>
-                  </div>
+          <section id="findings" className="reference-findings">
+            <div className="reference-section-head">
+              <div className="reference-section-title"><span className="section-icon violet"><FileText size={16} /></span><div><strong>Findings</strong><small>Evidence-backed results from completed scans.</small></div></div>
+              <div className="reference-findings-actions">
+                <div className="finding-search"><Search size={13} /><input value={findingQuery} onChange={(event) => setFindingQuery(event.target.value)} placeholder="Search findings..." /></div>
+                <button type="button" className="findings-filter-button"><Filter size={13} /></button>
+                <button type="button" className="findings-export" onClick={() => scrollTo("reports")}><Download size={13} /> Export Report</button>
+              </div>
+            </div>
+
+            <div className="severity-filters">
+              {severityOrder.map((severity) => (
+                <button key={severity} type="button" className={severityFilter === severity ? "selected" : ""} onClick={() => setSeverityFilter(severity)}>
+                  {severity === "all" ? "All" : severity.charAt(0).toUpperCase() + severity.slice(1)}
+                  <span>{severity === "all" ? findings.length : severityCounts[severity]}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="findings-table-wrap">
+              <table className="findings-table">
+                <thead>
+                  <tr><th>#</th><th>Severity</th><th>Finding</th><th>Evidence</th><th>Source Tool</th><th>Status</th><th>Recommendation</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                  {filteredFindings.map((finding, index) => {
+                    const open = expandedFinding === index;
+                    const severity = severityKey(finding.severity);
+                    return (
+                      <tr key={finding.title + index} className={open ? "open" : ""}>
+                        <td>{index + 1}</td>
+                        <td><span className={`severity-pill ${severity}`}>{severity}</span></td>
+                        <td><strong>{finding.title}</strong><small>{finding.category || "security observation"}</small></td>
+                        <td><span className="evidence-link">{finding.evidence?.summary || "Scanner evidence"} <ArrowRight size={11} /></span></td>
+                        <td>{finding.evidence?.sourceTools?.join(", ") || "scanner"}</td>
+                        <td><span className={`status-pill status-${findingStatus(finding).toLowerCase()}`}>{findingStatus(finding)}</span></td>
+                        <td>{finding.remediation || "Review scanner evidence and verify manually."}</td>
+                        <td><button className="view-button" type="button" onClick={() => setExpandedFinding(open ? null : index)}>View <ChevronDown size={12} className={open ? "rotated" : ""} /></button></td>
+                      </tr>
+                    );
+                  })}
+                  {!filteredFindings.length && (
+                    <tr className="empty-table-row"><td colSpan="8"><div><ShieldCheck size={18} /><strong>No findings yet</strong><small>Run an assessment to see results here.</small></div></td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {expandedFinding !== null && filteredFindings[expandedFinding] && (
+              <div className="finding-inspector">
+                <div><span>Finding detail</span><strong>{filteredFindings[expandedFinding].title}</strong></div>
+                <p>{filteredFindings[expandedFinding].evidence?.summary}</p>
+                <div className="inspector-grid">
+                  <span><b>Impact</b>{filteredFindings[expandedFinding].impact || "Review the observed behavior in context."}</span>
+                  <span><b>Remediation</b>{filteredFindings[expandedFinding].remediation}</span>
+                  <span><b>Evidence source</b>{(filteredFindings[expandedFinding].evidence?.sourceTools || []).join(", ")}</span>
+                  <span><b>Manual verification</b>{filteredFindings[expandedFinding].manualVerification ? "Required" : "Not required"}</span>
                 </div>
-                <div className="results-actions">
-                  <span>{findings.length} findings</span>
-                  <span>{assistant.assessment.executedTools?.length || 0} tools executed</span>
-                </div>
               </div>
+            )}
+          </section>
 
-              <ExecutiveSummary
-                summary={assistant.assessment.executiveSummary}
-                findings={findings}
-                executedTools={assistant.assessment.executedTools}
-              />
-
-              <div className="finding-list-head">
-                <div>
-                  <span>TECHNICAL FINDINGS</span>
-                  <strong>Evidence you can act on.</strong>
-                </div>
-                <small>Source tools remain visible with every finding.</small>
-              </div>
-
-              <div className="findings-list">
-                {findings.length
-                  ? findings.map((finding, index) => (
-                      <FindingCard
-                        key={finding.title + index}
-                        finding={finding}
-                        index={index}
-                      />
-                    ))
-                  : (
-                      <div className="empty-findings panel">
-                        <ShieldCheck size={21} />
-                        <h3>No evidence-backed findings were returned.</h3>
-                        <p>The assessment completed without a scanner-supported finding.</p>
-                      </div>
-                    )}
-              </div>
-
-              <div id="reports">
-                <ReportPanel report={assistant.assessment.report} />
-              </div>
-            </section>
-          )}
+          <section id="reports" className="reference-report-anchor">
+            <ReportPanel report={assistant.assessment?.report} />
+          </section>
 
           <section id="scanners">
             <AdvancedScannerDrawer />
           </section>
+
+          {assistant.error && (
+            <div className="reference-error error-banner" role="alert">
+              <strong>Assessment paused.</strong>
+              <span>{assistant.error}</span>
+            </div>
+          )}
+
+          <ProgressIndicator isWorking={assistant.isWorking} />
         </main>
       </div>
     </div>
