@@ -6,6 +6,7 @@ import {
   FileText,
   Filter,
   Globe2,
+  Linkedin,
   LayoutDashboard,
   LockKeyhole,
   Moon,
@@ -68,6 +69,20 @@ function App() {
       return false;
     }
   });
+
+  const toggleTheme = () => {
+    setDarkMode((value) => {
+      const next = !value;
+      try {
+        window.localStorage.setItem("bughunter-theme", next ? "dark" : "light");
+        document.documentElement.dataset.bughunterTheme = next ? "dark" : "light";
+        document.documentElement.classList.toggle("bughunter-dark", next);
+      } catch (_error) {
+        // Theme remains active for this render even if storage is unavailable.
+      }
+      return next;
+    });
+  };
   const findings = useMemo(() => assistant.assessment?.findings || EMPTY_FINDINGS, [assistant.assessment]);
   const executedTools = assistant.assessment?.executedTools || [];
   const workflowStep = getWorkflowStep(assistant);
@@ -140,10 +155,17 @@ function App() {
           <small>Evidence first.</small>
         </div>
 
-        <div className="reference-user">
+        <a
+          className="reference-user reference-linkedin"
+          href="https://www.linkedin.com/in/pradhuman--singh/"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Open Pradhuman Singh on LinkedIn"
+        >
           <span>PS</span>
-          <div><strong>Pradhuman Singh</strong><small>Security Engineer</small></div>
-        </div>
+          <div><strong>Pradhuman Singh</strong><small>Full Stack Developer</small></div>
+          <Linkedin size={15} aria-hidden="true" />
+        </a>
       </aside>
 
       <div className="reference-main">
@@ -186,17 +208,10 @@ function App() {
               className={`theme-control ${darkMode ? "active" : ""}`}
               title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
               aria-label={darkMode ? "Switch to light theme" : "Switch to dark theme"}
-              onClick={() => setDarkMode((value) => {
-                const next = !value;
-                try {
-                  window.localStorage.setItem("bughunter-theme", next ? "dark" : "light");
-                } catch (_error) {
-                  // Theme still changes for the current session if storage is unavailable.
-                }
-                return next;
-              })}
+              aria-pressed={darkMode}
+              onClick={toggleTheme}
             >
-              {darkMode ? <Moon size={13} /> : <Sun size={13} />}
+              {darkMode ? <Moon size={14} /> : <Sun size={14} />}
               <span>{darkMode ? "Dark" : "Light"}</span>
             </button>
             <span className="reference-ready"><i /> System Ready</span>
