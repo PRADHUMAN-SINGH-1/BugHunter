@@ -25,7 +25,6 @@ import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
 import { ApprovalCard } from "./components/ApprovalCard";
 import { AssistantChat } from "./components/AssistantChat";
 import { ExecutiveSummary } from "./components/ExecutiveSummary";
-import { ProgressIndicator } from "./components/ProgressIndicator";
 import { ReportPanel } from "./components/ReportPanel";
 import { ScanTimeline } from "./components/ScanTimeline";
 import { useAssistant } from "./hooks/useAssistant";
@@ -124,7 +123,8 @@ function App() {
           <button className="reference-nav-item" onClick={() => scrollTo("findings")}><Search size={16} /> Findings <span>{findings.length}</span></button>
           <button className="reference-nav-item" onClick={() => scrollTo("scanners")}><ScanLine size={16} /> Scanners</button>
           <button className="reference-nav-item" onClick={() => scrollTo("reports")}><FileText size={16} /> Reports</button>
-          <button className="reference-nav-item" onClick={() => scrollTo("trust-boundary")}><Settings size={16} /> Trust & Safety</button>
+          <button className="reference-nav-item" onClick={() => scrollTo("workspace")}><Globe2 size={16} /> Projects</button>
+          <button className="reference-nav-item" onClick={() => scrollTo("trust-boundary")}><Settings size={16} /> Settings</button>
         </nav>
 
         <div className="reference-quote">
@@ -158,7 +158,7 @@ function App() {
           </button>
 
           <div className="reference-top-actions">
-            <button className="theme-control" type="button" aria-label="Theme"><span>☼</span><span>◐</span></button>
+            <div className="theme-control" aria-hidden="true"><span>☼</span><span>◐</span></div>
             <span className="reference-ready"><i /> System Ready</span>
           </div>
         </header>
