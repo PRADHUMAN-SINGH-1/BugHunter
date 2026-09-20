@@ -1145,15 +1145,30 @@
   font-size: 8px;
 }
 
-/* Remove legacy blue/dark decorations from the earlier theme. */
-.editorial-app .security-header,
-.editorial-app .security-page,
-.editorial-app .assessment-head,
-.editorial-app .assessment-state,
-.editorial-app .metric-strip,
-.editorial-app .primary-workspace,
-.editorial-app .side-rail {
-  all: unset;
+/* Interactive surface hardening. */
+.editorial-app button,
+.editorial-app a,
+.editorial-app input,
+.editorial-app textarea,
+.editorial-app select {
+  pointer-events: auto;
+}
+
+.editorial-app button {
+  cursor: pointer;
+}
+
+.editorial-app .hero-art {
+  pointer-events: none;
+}
+
+.editorial-app .topbar-right,
+.editorial-app .start-assessment-button,
+.editorial-app .assistant-column,
+.editorial-app .editorial-rail,
+.editorial-app .advanced-scanners-section {
+  position: relative;
+  z-index: 2;
 }
 
 @media (max-width: 1180px) {
