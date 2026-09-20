@@ -113,7 +113,7 @@ async function runGeminiFallback({ message, plan }) {
       if (typeof parsed.executiveSummary === "string" && parsed.executiveSummary.trim()) {
         executiveSummary = parsed.executiveSummary.trim();
       }
-    } catch (_geminiError) {
+    } catch (_fallbackError) {
       // Deterministic summary remains available when the fallback model fails.
     }
   }
