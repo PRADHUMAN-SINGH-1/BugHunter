@@ -1645,3 +1645,340 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Functional dark theme. Layout and controls remain identical to the approved light reference. */
+.editorial-app.theme-dark {
+  --ink: #f3f5fb;
+  --ink-2: #b7bfd0;
+  --muted: #8c96aa;
+  --paper: #0f1118;
+  --white: #171a23;
+  --line: #2a2e39;
+  --line-soft: #20242d;
+  --violet: #8b79ff;
+  --violet-2: #a292ff;
+  --violet-soft: #27233f;
+  --mint: #4ac18c;
+  --mint-soft: #172d25;
+  --blue-soft: #1b2336;
+  --amber: #d6aa55;
+  --rose: #e07186;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.editorial-app.theme-dark .reference-sidebar,
+.editorial-app.theme-dark .reference-topbar,
+.editorial-app.theme-dark .reference-card,
+.editorial-app.theme-dark .reference-engine,
+.editorial-app.theme-dark .reference-findings,
+.editorial-app.theme-dark .reference-assistant-card,
+.editorial-app.theme-dark .reference-report-anchor .report-panel,
+.editorial-app.theme-dark .advanced-scanners-section,
+.editorial-app.theme-dark .assistant-panel {
+  background: #151922 !important;
+  color: var(--ink);
+  border-color: var(--line) !important;
+}
+
+.editorial-app.theme-dark .reference-main {
+  background: #0f1118;
+}
+
+.editorial-app.theme-dark .reference-logo,
+.editorial-app.theme-dark .reference-logo strong,
+.editorial-app.theme-dark .reference-user strong,
+.editorial-app.theme-dark .reference-card-head,
+.editorial-app.theme-dark .reference-section-title strong,
+.editorial-app.theme-dark .reference-engine-head,
+.editorial-app.theme-dark .reference-engine-grid b,
+.editorial-app.theme-dark .reference-step strong,
+.editorial-app.theme-dark .tool-status strong,
+.editorial-app.theme-dark .findings-table td strong,
+.editorial-app.theme-dark .reference-report-anchor .report-panel h2,
+.editorial-app.theme-dark .editorial-logo,
+.editorial-app.theme-dark .workflow-node strong {
+  color: var(--ink);
+}
+
+.editorial-app.theme-dark .reference-logo small,
+.editorial-app.theme-dark .reference-user small,
+.editorial-app.theme-dark .reference-nav-item,
+.editorial-app.theme-dark .reference-section-title small,
+.editorial-app.theme-dark .reference-card-head small,
+.editorial-app.theme-dark .reference-step small,
+.editorial-app.theme-dark .reference-step em,
+.editorial-app.theme-dark .tool-status small,
+.editorial-app.theme-dark .finding-search input,
+.editorial-app.theme-dark .findings-table td,
+.editorial-app.theme-dark .reference-report-anchor .report-panel p,
+.editorial-app.theme-dark .scanner-section-head p,
+.editorial-app.theme-dark .scanner-count,
+.editorial-app.theme-dark .scanner-field span,
+.editorial-app.theme-dark .scanner-module-strip button,
+.editorial-app.theme-dark .scanner-result-card summary {
+  color: var(--muted);
+}
+
+.editorial-app.theme-dark .reference-nav-item:hover,
+.editorial-app.theme-dark .reference-nav-item.active,
+.editorial-app.theme-dark .assistant-tab:hover,
+.editorial-app.theme-dark .severity-filters button:hover,
+.editorial-app.theme-dark .findings-filter-button:hover {
+  background: #1c202b;
+}
+
+.editorial-app.theme-dark .reference-nav-item.active {
+  color: var(--violet-2);
+  background: #24203c;
+}
+
+.editorial-app.theme-dark .reference-nav-item span,
+.editorial-app.theme-dark .reference-logo-mark,
+.editorial-app.theme-dark .section-icon.violet,
+.editorial-app.theme-dark .reference-engine-grid > div > span {
+  background: var(--violet-soft);
+  color: var(--violet-2);
+}
+
+.editorial-app.theme-dark .reference-logo-mark {
+  color: #fff;
+  background: #24283a;
+}
+
+.editorial-app.theme-dark .reference-quote,
+.editorial-app.theme-dark .reference-search,
+.editorial-app.theme-dark .workspace-switcher,
+.editorial-app.theme-dark .reference-search,
+.editorial-app.theme-dark .theme-control,
+.editorial-app.theme-dark .assistant-clear,
+.editorial-app.theme-dark .assistant-tab,
+.editorial-app.theme-dark .findings-filter-button,
+.editorial-app.theme-dark .view-button,
+.editorial-app.theme-dark .severity-filters button,
+.editorial-app.theme-dark .reference-report-anchor .report-actions button {
+  background: #151922;
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.editorial-app.theme-dark .reference-search {
+  color: #8994aa;
+}
+
+.editorial-app.theme-dark .reference-search kbd {
+  border-color: #343846;
+  background: #1a1e27;
+  color: #97a1b5;
+}
+
+.editorial-app.theme-dark .editorial-hero h1,
+.editorial-app.theme-dark .reference-hero h1 {
+  color: #f4f6fb;
+}
+
+.editorial-app.theme-dark .reference-hero-copy p {
+  color: #a3aec1;
+}
+
+.editorial-app.theme-dark .reference-eyebrow {
+  color: #b9b1ff;
+}
+
+.editorial-app.theme-dark .reference-engine-grid > div {
+  background: #1b1f28;
+}
+
+.editorial-app.theme-dark .reference-engine-grid small {
+  color: #8d97aa;
+}
+
+.editorial-app.theme-dark .reference-engine-grid b {
+  color: #eef1f7;
+}
+
+.editorial-app.theme-dark .assistant-header,
+.editorial-app.theme-dark .reference-engine-head,
+.editorial-app.theme-dark .reference-card-head,
+.editorial-app.theme-dark .findings-table th,
+.editorial-app.theme-dark .scanner-section-head,
+.editorial-app.theme-dark .reference-section-head {
+  border-color: var(--line-soft);
+}
+
+.editorial-app.theme-dark .assistant-tab {
+  color: #8e98ad;
+}
+
+.editorial-app.theme-dark .assistant-tab.active {
+  color: #f3f5fb;
+}
+
+.editorial-app.theme-dark .message p {
+  background: #1c212b;
+  border-color: #2a2f3b;
+  color: #d9deea;
+}
+
+.editorial-app.theme-dark .message.user p {
+  background: #232033;
+  border-color: #39325b;
+  color: #ddd7ff;
+}
+
+.editorial-app.theme-dark .message-avatar {
+  background: #1b1f29;
+  border-color: #303541;
+  color: #a79bff;
+}
+
+.editorial-app.theme-dark .chat-input,
+.editorial-app.theme-dark .scanner-field input,
+.editorial-app.theme-dark .scanner-field select,
+.editorial-app.theme-dark .finding-search {
+  background: #11151d;
+  border-color: #343946;
+  color: #eef1f8;
+}
+
+.editorial-app.theme-dark .chat-input textarea,
+.editorial-app.theme-dark .finding-search input {
+  color: #eef1f8;
+}
+
+.editorial-app.theme-dark .chat-input textarea::placeholder,
+.editorial-app.theme-dark .finding-search input::placeholder {
+  color: #6f7a8f;
+}
+
+.editorial-app.theme-dark .workflow-node > b,
+.editorial-app.theme-dark .reference-step > b {
+  background: #222733;
+  color: #8e99ad;
+}
+
+.editorial-app.theme-dark .workflow-node.active > b,
+.editorial-app.theme-dark .reference-step.active > b {
+  background: var(--violet);
+  color: #fff;
+}
+
+.editorial-app.theme-dark .trust-note,
+.editorial-app.theme-dark .reference-step,
+.editorial-app.theme-dark .tool-status,
+.editorial-app.theme-dark .finding-list-head,
+.editorial-app.theme-dark .reference-step-list,
+.editorial-app.theme-dark .findings-table td,
+.editorial-app.theme-dark .findings-table th {
+  border-color: var(--line-soft);
+}
+
+.editorial-app.theme-dark .trust-note {
+  color: #9ea8ba;
+}
+
+.editorial-app.theme-dark .reference-findings-actions .finding-search,
+.editorial-app.theme-dark .severity-filters button {
+  background: #151922;
+}
+
+.editorial-app.theme-dark .severity-filters button.selected {
+  background: #2a2548;
+  border-color: #4d4384;
+  color: #c9c0ff;
+}
+
+.editorial-app.theme-dark .findings-table th {
+  background: #131720;
+  color: #8993a7;
+}
+
+.editorial-app.theme-dark .findings-table td {
+  background: #151922;
+  color: #9da7b8;
+}
+
+.editorial-app.theme-dark .findings-table tr.open td {
+  background: #191724;
+}
+
+.editorial-app.theme-dark .finding-inspector {
+  background: #171622;
+  border-color: #39325b;
+}
+
+.editorial-app.theme-dark .inspector-grid > span {
+  border-color: #303541;
+  color: #9da7b8;
+}
+
+.editorial-app.theme-dark .inspector-grid b {
+  color: #dce1eb;
+}
+
+.editorial-app.theme-dark .empty-table-row td {
+  background: #151922;
+}
+
+.editorial-app.theme-dark .scanner-section-head,
+.editorial-app.theme-dark .scanner-control-grid,
+.editorial-app.theme-dark .scanner-results-grid {
+  background: #151922;
+}
+
+.editorial-app.theme-dark .scanner-module-strip button {
+  background: #151922;
+  border-color: var(--line);
+}
+
+.editorial-app.theme-dark .scanner-module-strip button.selected,
+.editorial-app.theme-dark .scanner-module-strip button:hover {
+  background: #24203d;
+  color: #c8c1ff;
+}
+
+.editorial-app.theme-dark .scanner-result-card {
+  background: #171b24;
+  border-color: var(--line);
+}
+
+.editorial-app.theme-dark .scanner-result-card pre {
+  background: #10141b;
+  color: #b0b7cc;
+}
+
+.editorial-app.theme-dark .editorial-app,
+.editorial-app.theme-dark .reference-report-anchor .report-panel,
+.editorial-app.theme-dark .reference-assistant-card,
+.editorial-app.theme-dark .reference-card,
+.editorial-app.theme-dark .reference-engine,
+.editorial-app.theme-dark .reference-findings,
+.editorial-app.theme-dark .advanced-scanners-section {
+  box-shadow: 0 9px 26px rgba(0,0,0,.14);
+}
+
+.editorial-app.theme-dark .theme-control {
+  background: #1b1f29;
+  color: #eceff5;
+}
+
+.editorial-app.theme-dark .reference-note {
+  color: #9ca4b5;
+}
+
+.editorial-app.theme-dark .reference-ribbon {
+  border-color: rgba(164,150,255,.35);
+}
+
+.editorial-app.theme-dark .reference-arrow {
+  border-color: #8b92a3;
+}
+
+.editorial-app.theme-dark .reference-arrow::after {
+  border-color: #8b92a3;
+}
+
+.editorial-app.theme-dark .ready-chip,
+.editorial-app.theme-dark .reference-ready {
+  color: #5ed5a1;
+}
