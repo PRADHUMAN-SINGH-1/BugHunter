@@ -1982,3 +1982,220 @@
 .editorial-app.theme-dark .reference-ready {
   color: #5ed5a1;
 }
+
+/* Interaction + responsive corrections */
+.reference-search {
+  width: min(470px, 100%);
+  min-width: 0;
+  cursor: text;
+}
+.reference-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 8px;
+}
+.reference-search input::placeholder {
+  color: #96a0b0;
+}
+.reference-search:focus-within {
+  border-color: #c7c0f0;
+  box-shadow: 0 0 0 2px rgba(102,81,231,.06);
+}
+.theme-control {
+  min-width: 68px;
+  height: 29px;
+  padding: 0 8px;
+  border: 1px solid #d8d8d4;
+  border-radius: 999px;
+  background: #fff;
+  color: #66728a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 7px;
+  font-weight: 800;
+}
+.theme-control.active {
+  color: #c9c2ff;
+  background: #25213f;
+  border-color: #4c4380;
+}
+.theme-control:hover {
+  border-color: #bcb6dc;
+}
+.scanner-control-grid {
+  min-width: 0;
+}
+.editorial-app .scanner-field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.editorial-app .scanner-field.target-field {
+  width: 100%;
+  min-width: 0;
+}
+.editorial-app .scanner-field input,
+.editorial-app .scanner-field select {
+  display: block;
+  width: 100% !important;
+  min-width: 0;
+}
+.findings-filter-button.active {
+  color: var(--violet);
+  border-color: #cfc8f2;
+  background: #f0edff;
+}
+.editorial-app.theme-dark .reference-search input {
+  color: #eef1f8;
+}
+.editorial-app.theme-dark .reference-search input::placeholder {
+  color: #6f7a8f;
+}
+.editorial-app.theme-dark .reference-search:focus-within {
+  border-color: #5a5092;
+  box-shadow: 0 0 0 2px rgba(139,121,255,.08);
+}
+.editorial-app.theme-dark .theme-control {
+  color: #eef1f8;
+  border-color: #3a3d48;
+  background: #1c2029;
+}
+.editorial-app.theme-dark .theme-control.active {
+  background: #2a2548;
+  border-color: #574d91;
+}
+@media (max-width: 1100px) {
+  .reference-topbar {
+    grid-template-columns: 170px minmax(180px, 1fr) auto;
+  }
+  .reference-main-grid {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+@media (max-width: 900px) {
+  .reference-content {
+    width: min(100% - 26px, 1295px);
+  }
+  .reference-hero {
+    min-height: 0;
+  }
+  .reference-main-grid {
+    grid-template-columns: 1fr;
+  }
+  .reference-right-rail {
+    grid-template-columns: 1fr 1fr;
+  }
+  .reference-section-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+  }
+  .reference-findings-actions {
+    width: 100%;
+  }
+  .finding-search {
+    flex: 1 1 220px;
+  }
+}
+@media (max-width: 720px) {
+  .reference-topbar {
+    height: auto;
+    min-height: 54px;
+    padding: 8px 12px;
+    grid-template-columns: 1fr auto;
+  }
+  .reference-search {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+  .workspace-switcher {
+    min-width: 0;
+  }
+  .reference-top-actions {
+    justify-content: flex-end;
+  }
+  .reference-hero {
+    grid-template-columns: 1fr;
+  }
+  .reference-engine {
+    margin-top: 12px;
+  }
+  .reference-engine-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .reference-right-rail {
+    grid-template-columns: 1fr;
+  }
+  .reference-findings-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 30px auto;
+    gap: 6px;
+  }
+  .finding-search {
+    width: 100%;
+    min-width: 0;
+  }
+  .findings-export {
+    white-space: nowrap;
+  }
+  .editorial-app .scanner-control-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .editorial-app .scanner-field,
+  .editorial-app .scanner-field.target-field {
+    width: 100%;
+  }
+  .editorial-app .scanner-field input,
+  .editorial-app .scanner-field select,
+  .editorial-app .scanner-run-button {
+    width: 100% !important;
+  }
+}
+@media (max-width: 520px) {
+  .reference-logo small,
+  .reference-ready {
+    display: none;
+  }
+  .theme-control {
+    min-width: 36px;
+    width: 36px;
+    padding: 0;
+  }
+  .theme-control span {
+    display: none;
+  }
+  .reference-content {
+    width: calc(100% - 18px);
+  }
+  .reference-hero h1 {
+    font-size: 38px;
+  }
+  .reference-engine-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+  .reference-findings-actions {
+    grid-template-columns: 1fr 30px;
+  }
+  .findings-export {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+  .reference-step {
+    grid-template-columns: 25px 1fr;
+  }
+  .reference-step em {
+    display: none;
+  }
+}
