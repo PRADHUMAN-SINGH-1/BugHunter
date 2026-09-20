@@ -115,7 +115,7 @@ function App() {
   };
 
   return (
-    <div className="reference-app editorial-app">
+    <div className={`reference-app editorial-app ${darkMode ? "theme-dark" : ""}`}>
       <aside className="reference-sidebar">
         <a href="#workspace" className="reference-logo" aria-label="BugHunter AI home">
           <span className="reference-logo-mark"><ShieldCheck size={20} /></span>
