@@ -1,12 +1,17 @@
 import { Bot, ShieldCheck, UserRound } from "lucide-react";
 import { ChatInput } from "./ChatInput";
 
-export function AssistantChat({ messages, onSend, isWorking }) {
+export function AssistantChat({ messages, onSend, isWorking, onClear }) {
   return <section className="assistant-panel panel">
-    <div className="panel-heading assistant-heading">
-      <div className="heading-icon"><ShieldCheck size={20} /></div>
-      <div><p className="eyebrow">AI SECURITY WORKSPACE</p><h2>Security conversation</h2></div>
-      <span className={`live-pill ${isWorking ? "working" : ""}`}><span /> {isWorking ? "Analyzing" : "Ready"}</span>
+    <div className="assistant-header">
+      <div className="assistant-tabs">
+        <button type="button" className="assistant-tab active"><ShieldCheck size={14} /> AI Security Assistant</button>
+        <button type="button" className="assistant-tab"><Bot size={14} /> Assessment Console</button>
+      </div>
+      <div className="assistant-header-right">
+        <span className={`live-pill ${isWorking ? "working" : ""}`}><span /> {isWorking ? "Analyzing" : "Ready"}</span>
+        <button type="button" className="assistant-clear" onClick={onClear}>Clear</button>
+      </div>
     </div>
     <div className="message-list" aria-live="polite">
       {messages.map((message) => <article key={message.id} className={`message ${message.role}`}>
