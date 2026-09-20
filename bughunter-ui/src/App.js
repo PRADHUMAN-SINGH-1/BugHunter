@@ -68,7 +68,7 @@ function App() {
       return false;
     }
   });
-  const findings = assistant.assessment?.findings || EMPTY_FINDINGS;
+  const findings = useMemo(() => assistant.assessment?.findings || EMPTY_FINDINGS, [assistant.assessment]);
   const executedTools = assistant.assessment?.executedTools || [];
   const workflowStep = getWorkflowStep(assistant);
   const [findingQuery, setFindingQuery] = useState("");
