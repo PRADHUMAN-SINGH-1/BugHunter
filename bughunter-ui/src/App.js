@@ -168,9 +168,12 @@ function App() {
           rel="noreferrer"
           aria-label="Open Pradhuman Singh on LinkedIn"
         >
-          <span>PS</span>
+          <span className="linkedin-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img">
+              <path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.68H9.35V8.99h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.28 2.37 4.28 5.46v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM3.56 20.45h3.57V8.99H3.56v11.46z"/>
+            </svg>
+          </span>
           <div><strong>Pradhuman Singh</strong><small>Full Stack Developer</small></div>
-          <span className="linkedin-mark" aria-hidden="true">in</span>
         </a>
       </aside>
 
@@ -232,25 +235,13 @@ function App() {
               <p>Describe a target. Approve the plan. Let BugHunter collect evidence-backed findings and turn them into work your team can act on.</p>
             </div>
 
-            <div className="reference-hero-art" aria-hidden="true">
+            <div className="reference-hero-art reference-floating-art" aria-hidden="true">
               <div className="reference-note">Scan.<br />Validate.<br />Strengthen.</div>
               <div className="reference-ribbon ribbon-one" />
               <div className="reference-ribbon ribbon-two" />
               <div className="reference-arrow" />
             </div>
 
-            <section className="reference-engine">
-              <div className="reference-engine-head">
-                <span><Wrench size={13} /> Assessment Engine</span>
-                <strong><i /> Online</strong>
-              </div>
-              <div className="reference-engine-grid">
-                <div><span><LockKeyhole size={14} /></span><small>Authorization</small><b>Enforced</b></div>
-                <div><span><Globe2 size={14} /></span><small>Network</small><b>Controlled</b></div>
-                <div><span><FileText size={14} /></span><small>Evidence</small><b>Tool-backed</b></div>
-                <div><span><Sparkles size={14} /></span><small>AI Assistant</small><b>Active</b></div>
-              </div>
-            </section>
           </section>
 
           <section className="reference-main-grid">
@@ -274,6 +265,18 @@ function App() {
             </div>
 
             <aside className="reference-right-rail">
+              <section className="reference-engine reference-engine-rail">
+                <div className="reference-engine-head">
+                  <span><Wrench size={13} /> Assessment Engine</span>
+                  <strong><i /> Online</strong>
+                </div>
+                <div className="reference-engine-grid">
+                  <div><span><LockKeyhole size={14} /></span><small>Authorization</small><b>Enforced</b></div>
+                  <div><span><Globe2 size={14} /></span><small>Network</small><b>Controlled</b></div>
+                  <div><span><FileText size={14} /></span><small>Evidence</small><b>Tool-backed</b></div>
+                  <div><span><Sparkles size={14} /></span><small>AI Assistant</small><b>Active</b></div>
+                </div>
+              </section>
               <section className="reference-card workflow-reference">
                 <div className="reference-card-head">
                   <span><LayoutDashboard size={14} /> Assessment Workflow</span>
