@@ -1,20 +1,20 @@
 const DEFAULT_MODEL = "gemini-2.5-flash";
 
 function hasGeminiKey() {
-  return Boolean(process.env.GEMINI_API_KEY);
+  return Boolean(process.env.FALLBACK_AI_API_KEY);
 }
 
 function getGeminiModel() {
-  return process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  return process.env.FALLBACK_AI_MODEL || DEFAULT_MODEL;
 }
 
 async function generateGeminiText(prompt) {
   if (!hasGeminiKey()) {
-    throw new Error("No Gemini fallback key is configured.");
+    throw new Error("No fallback AI key is configured.");
   }
 
   const model = encodeURIComponent(getGeminiModel());
-  const key = encodeURIComponent(process.env.GEMINI_API_KEY);
+  const key = encodeURIComponent(process.env.FALLBACK_AI_API_KEY);
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
   const response = await fetch(endpoint, {
@@ -37,7 +37,7 @@ async function generateGeminiText(prompt) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    const message = data?.error?.message || "Gemini request failed.";
+    const message = data?.error?.message || "Fallback AI request failed.";
     throw new Error(message);
   }
 
@@ -46,7 +46,7 @@ async function generateGeminiText(prompt) {
     .join("")
     .trim();
 
-  if (!text) throw new Error("Gemini returned an empty response.");
+  if (!text) throw new Error("Fallback AI returned an empty response.");
 
   return text;
 }
