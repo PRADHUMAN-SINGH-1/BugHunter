@@ -3144,3 +3144,127 @@ html.bughunter-dark .reference-app {
   .reference-app .message p { font-size: 12px; }
   .reference-app .chat-input textarea { font-size: 12px; }
 }
+
+/* Assessment Engine belongs to the brand/sidebar column. */
+.reference-sidebar {
+  padding-top: 12px;
+  overflow-y: auto;
+}
+
+.sidebar-engine {
+  width: 100%;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(31,37,51,.035);
+  overflow: hidden;
+}
+
+.sidebar-engine-head {
+  min-height: 34px;
+  padding: 0 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ink);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.sidebar-engine-head span,
+.sidebar-engine-head strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sidebar-engine-head span svg {
+  color: var(--violet);
+}
+
+.sidebar-engine-head strong {
+  color: var(--mint);
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.sidebar-engine-head strong i {
+  width: 4px;
+  height: 4px;
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--mint);
+}
+
+.sidebar-engine-list {
+  display: grid;
+}
+
+.sidebar-engine-list > div {
+  min-height: 29px;
+  padding: 0 9px;
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.sidebar-engine-list > div:last-child {
+  border-bottom: 0;
+}
+
+.sidebar-engine-list svg {
+  color: var(--violet);
+}
+
+.sidebar-engine-list span {
+  color: #6b768a;
+  font-size: 7px;
+}
+
+.sidebar-engine-list b {
+  color: var(--ink);
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.reference-sidebar .reference-logo {
+  padding-top: 6px;
+  padding-bottom: 20px;
+}
+
+.reference-main .reference-right-rail {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 900px) {
+  .sidebar-engine {
+    max-width: 350px;
+  }
+}
+
+.editorial-app.theme-dark .sidebar-engine {
+  background: #151922;
+  border-color: #2a2e39;
+  box-shadow: 0 8px 22px rgba(0,0,0,.16);
+}
+
+.editorial-app.theme-dark .sidebar-engine-head {
+  color: #eef1f7;
+  border-color: #2a2e39;
+}
+
+.editorial-app.theme-dark .sidebar-engine-list > div {
+  border-color: #20242d;
+}
+
+.editorial-app.theme-dark .sidebar-engine-list span {
+  color: #a5afc0;
+}
+
+.editorial-app.theme-dark .sidebar-engine-list b {
+  color: #eef1f7;
+}
