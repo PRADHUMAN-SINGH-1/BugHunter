@@ -25,7 +25,6 @@ import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
 import { ApprovalCard } from "./components/ApprovalCard";
 import { AssistantChat } from "./components/AssistantChat";
 import { ReportPanel } from "./components/ReportPanel";
-import { ScanTimeline } from "./components/ScanTimeline";
 import { useAssistant } from "./hooks/useAssistant";
 
 const scannerRows = [
@@ -42,6 +41,7 @@ const scannerRows = [
 ];
 
 const severityOrder = ["all", "critical", "high", "medium", "low", "info"];
+const EMPTY_FINDINGS = [];
 
 function getWorkflowStep({ assessment, gate, isWorking }) {
   if (assessment) return 4;
@@ -68,7 +68,7 @@ function App() {
       return false;
     }
   });
-  const findings = assistant.assessment?.findings || [];
+  const findings = assistant.assessment?.findings || EMPTY_FINDINGS;
   const executedTools = assistant.assessment?.executedTools || [];
   const workflowStep = getWorkflowStep(assistant);
   const [findingQuery, setFindingQuery] = useState("");
