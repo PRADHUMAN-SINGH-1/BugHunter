@@ -186,7 +186,8 @@ function App() {
           <div className="reference-top-actions">
             <button
               type="button"
-              className="theme-control"
+              className={`theme-control ${darkMode ? "active" : ""}`}
+              title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
               aria-label={darkMode ? "Switch to light theme" : "Switch to dark theme"}
               onClick={() => setDarkMode((value) => {
                 const next = !value;
@@ -198,7 +199,8 @@ function App() {
                 return next;
               })}
             >
-              <span>☼</span><span>{darkMode ? "●" : "○"}</span>
+              {darkMode ? <Moon size={13} /> : <Sun size={13} />}
+              <span>{darkMode ? "Dark" : "Light"}</span>
             </button>
             <span className="reference-ready"><i /> System Ready</span>
           </div>
