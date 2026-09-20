@@ -62,6 +62,13 @@ function severityKey(value) {
 
 function App() {
   const assistant = useAssistant();
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      return window.localStorage.getItem("bughunter-theme") === "dark";
+    } catch (_error) {
+      return false;
+    }
+  });
   const findings = assistant.assessment?.findings || [];
   const executedTools = assistant.assessment?.executedTools || [];
   const workflowStep = getWorkflowStep(assistant);
@@ -158,7 +165,22 @@ function App() {
           </button>
 
           <div className="reference-top-actions">
-            <div className="theme-control" aria-hidden="true"><span>☼</span><span>◐</span></div>
+            <button
+              type="button"
+              className="theme-control"
+              aria-label={darkMode ? "Switch to light theme" : "Switch to dark theme"}
+              onClick={() => setDarkMode((value) => {
+                const next = !value;
+                try {
+                  window.localStorage.setItem("bughunter-theme", next ? "dark" : "light");
+                } catch (_error) {
+                  // Theme still changes for the current session if storage is unavailable.
+                }
+                return next;
+              })}
+            >
+              <span>☼</span><span>{darkMode ? "●" : "○"}</span>
+            </button>
             <span className="reference-ready"><i /> System Ready</span>
           </div>
         </header>
