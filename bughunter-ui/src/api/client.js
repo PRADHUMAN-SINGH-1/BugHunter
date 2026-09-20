@@ -1,3 +1,5 @@
+import { createLocalDemoAssessment } from "../demoFixture";
+
 const configuredBase = (process.env.REACT_APP_API_BASE_URL || "").trim().replace(/\/$/, "");
 const isProduction = process.env.NODE_ENV === "production";
 const API_BASE_URL = configuredBase || (isProduction ? window.location.origin : "http://localhost:5001");
@@ -28,7 +30,13 @@ async function post(path, body) {
 }
 
 export const sendAssistantMessage = (body) => post("/api/assistant/message", body);
-export const runDemoAssessment = () => post("/api/assistant/demo", {});
+export const runDemoAssessment = async () => {
+  try {
+    return await post("/api/assistant/demo", {});
+  } catch (_error) {
+    return createLocalDemoAssessment();
+  }
+};
 
 export const runLegacyScanner = (scanner, target) => {
   const body = scanner === "idor" || scanner === "endpoints" ? { baseUrl: target } : { url: target };
