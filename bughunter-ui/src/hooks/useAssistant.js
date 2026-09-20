@@ -118,6 +118,19 @@ export function useAssistant() {
     return callAssistant(requestRef.current, { scanning: true });
   }, [callAssistant]);
 
+  const reset = useCallback(() => {
+    window.clearInterval(timelineTimer.current);
+    timelineTimer.current = null;
+    requestRef.current = {};
+    setMessages([welcomeMessage]);
+    setGate(null);
+    setScanPlan(null);
+    setTimeline(timelineTemplate.map((label) => ({ label, state: "pending" })));
+    setIsWorking(false);
+    setAssessment(null);
+    setError(null);
+  }, []);
+
   const runDemo = useCallback(async () => {
     const startedAt = Date.now();
     setAssessment(null);
@@ -158,6 +171,7 @@ export function useAssistant() {
     confirmAuthorization,
     chooseScope,
     approvePlan,
-    runDemo
+    runDemo,
+    reset
   };
 }
