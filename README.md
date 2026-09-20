@@ -2,7 +2,7 @@
 
 > Your AI Application Security Engineer
 
-BugHunter AI turns an authorized application-security assessment into a guided conversation. It combines deterministic web-security scanners with GPT-5.6 reasoning so developers receive evidence-backed findings, remediation guidance, and a developer-ready report—not a wall of scanner output.
+BugHunter AI turns an authorized application-security assessment into a guided conversation. It combines deterministic web-security scanners with an AI reasoning layer so developers receive evidence-backed findings, remediation guidance, and a developer-ready report—not a wall of scanner output.
 
 Built for **OpenAI Build Week 2026 · Developer Tools**.
 
@@ -42,7 +42,7 @@ flowchart LR
   U[Developer] --> UI[React AI workspace]
   UI -->|assistant request| API[Express API]
   API -->|approval gate| PLAN[Scan plan]
-  PLAN -->|approved only| ORCH[GPT-5.6 orchestrator]
+  PLAN -->|approved only| ORCH[AI orchestrator]
   ORCH -->|strict function calls| TOOLS[Backend tool layer]
   TOOLS --> SCAN[Deterministic scanners]
   SCAN --> EVIDENCE[Raw evidence]
@@ -58,14 +58,14 @@ For a deeper component and trust-boundary explanation, see [docs/architecture.md
 1. A developer describes an authorized target and goal.
 2. BugHunter AI asks for explicit authorization and whether active testing is allowed.
 3. It shows the exact plan, scope, request estimate, and non-destructive posture.
-4. After approval, GPT-5.6 may call only approved backend tools with strict JSON schemas.
+4. After approval, the configured AI layer may call only approved backend tools with strict JSON schemas.
 5. Deterministic scanners collect evidence; GPT-5.6 correlates and explains it.
 6. A final guard removes any model finding not linked to tools that ran.
 7. The UI renders structured findings and an exportable report.
 
 ## GPT-5.6 usage
 
-The backend uses the official OpenAI Node SDK and the [Responses API](https://developers.openai.com/api/docs/guides/responses) with `OPENAI_MODEL=gpt-5.6` by default. The model does not receive unrestricted network tools. Instead, it can invoke a limited allowlist of strict-schema backend functions such as `run_header_scan`, `run_crawl`, and `run_sqli_scan`. This uses the [function-calling](https://help.openai.com/en/articles/8555517) pattern while preserving deterministic scanner evidence as the source of truth.
+The backend keeps model access behind the server-side orchestrator. Models do not receive unrestricted network tools; instead, the configured AI layer can invoke a limited allowlist of strict-schema backend functions such as `run_header_scan`, `run_crawl`, and `run_sqli_scan`, while deterministic scanner evidence remains the source of truth.
 
 ## Codex usage
 
@@ -77,7 +77,7 @@ Codex was used as the engineering collaborator for this Build Week project: it i
 
 - Node.js 18+
 - npm
-- An OpenAI API key only for real AI assessments after plan approval
+- An AI provider key for real assessments after plan approval
 
 ### Install
 
@@ -95,6 +95,8 @@ cp .env.example .env
 # .env
 OPENAI_API_KEY=your_api_key
 OPENAI_MODEL=gpt-5.6
+FALLBACK_AI_API_KEY=your_fallback_key
+FALLBACK_AI_MODEL=gemini-2.5-flash
 BUGHUNTER_ALLOW_PRIVATE_TARGETS=false
 BUGHUNTER_FRONTEND_ORIGIN=http://localhost:3000
 ```
