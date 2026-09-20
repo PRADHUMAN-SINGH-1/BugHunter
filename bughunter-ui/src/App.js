@@ -1,7 +1,6 @@
 import {
   Activity,
   ArrowRight,
-  CheckCircle2,
   ChevronDown,
   Download,
   FileText,
@@ -10,7 +9,6 @@ import {
   LayoutDashboard,
   LockKeyhole,
   Moon,
-  Play,
   Search,
   ScanLine,
   Settings,
@@ -26,7 +24,6 @@ import "./SecurityConsole.css";
 import { AdvancedScannerDrawer } from "./components/AdvancedScannerDrawer";
 import { ApprovalCard } from "./components/ApprovalCard";
 import { AssistantChat } from "./components/AssistantChat";
-import { ExecutiveSummary } from "./components/ExecutiveSummary";
 import { ReportPanel } from "./components/ReportPanel";
 import { ScanTimeline } from "./components/ScanTimeline";
 import { useAssistant } from "./hooks/useAssistant";
@@ -167,7 +164,7 @@ function App() {
                 if (event.key !== "Enter") return;
                 const query = findingQuery.trim().toLowerCase();
                 if (!query) {
-                  document.querySelector(".reference-assistant .chat-input textarea")?.focus();
+                  document.querySelector(".reference-assistant-card .chat-input textarea")?.focus();
                   return;
                 }
                 const target = findings.some((finding) =>
